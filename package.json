@@ -1,0 +1,60 @@
+{
+  "name": "automation-extra-interception-proxy",
+  "version": "0.1.0",
+  "description": "Puppeteer extra plugin for advanced interception and proxying requests",
+  "repository": "utyfua/automation-extra-interception-proxy",
+  "typings": "dist/index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "prebuild": "run-s clean",
+    "build": "run-s build:tsc build:rollup ambient-dts",
+    "build:tsc": "tsc --module commonjs",
+    "build:rollup": "rollup -c rollup.config.ts",
+    "docs": "documentation readme --quiet --shallow --github --markdown-theme transitivebs --readme-file readme.md --section API ./src/index.ts",
+    "postdocs": "npx prettier --write readme.md",
+    "test:ts": "ava -v --config ava.config-ts.js",
+    "test:js": "ava -v --serial --concurrency 1 --fail-fast",
+    "test": "run-p test:js test:ts",
+    "test-ci": "run-s test",
+    "ambient-dts": "run-s ambient-dts-copy",
+    "ambient-dts-copy": "copyfiles -u 1 \"src/**/*.d.ts\" dist"
+  },
+  "keywords": [
+    "puppeteer",
+    "interception",
+    "proxy"
+  ],
+  "author": "Utyfua",
+  "license": "MIT",
+  "dependencies": {
+    "got": "^11.8.2",
+    "proxy-agent": "^5.0.0",
+    "puppeteer-extra-plugin": "^3.2.0",
+    "tough-cookie": "^4.0.0"
+  },
+  "peerDependencies": {
+    "puppeteer": "*",
+    "puppeteer-extra": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/tough-cookie": "^4.0.1",
+    "copyfiles": "^2.4.1",
+    "documentation-markdown-themes": "^13.1.2",
+    "jest": "^27.3.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.58.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typed-emitter": "^1.4.0",
+    "typescript": "^4.4.4"
+  }
+}
