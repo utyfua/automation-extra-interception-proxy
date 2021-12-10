@@ -6,33 +6,27 @@ import { CookieJar } from 'tough-cookie';
 import { AUTHOR_NEW_ISSUE_URL, NPM_PACKAGE_NAME } from '../../interfaces/constants'
 
 import { handyCDP } from './handyCDP'
+import { getDomain } from '../urls'
 import { formatCookie, parseCookieHeader } from './serializing'
 
 interface initialVariables {
     url: string;
     domain: string;
-    frame: Puppeteer.Frame,
     client: Puppeteer.CDPSession,
 }
 
 function getInitialVariables(request: Puppeteer.HTTPRequest): initialVariables {
     const frame = request.frame();
 
-    // request.frame() is possible still null when request.isNavigationRequest() is false
-    if (!frame) throw new Error(
-        `Unable to get request frame by ${NPM_PACKAGE_NAME} ` +
-        `cuz this library doest not support this specific case\n` +
-        `Please provide more information ${AUTHOR_NEW_ISSUE_URL}\n` +
-        `Url: ${request.url()}`);
-
     const url = request.isNavigationRequest() || !frame ? request.url() : frame.url();
 
-    const domain = url ? new URL(url).hostname : '';
+    const domain = getDomain(url);
 
     // WARNING: we are using private property of Puppeteer.HTTPRequest here
-    const client = frame._frameManager._client;
+    // @ts-ignore
+    const client = request._client;
 
-    return { url, domain, frame, client };
+    return { url, domain, client };
 }
 
 
@@ -55,9 +49,10 @@ export async function getCookieJarByRequest(request: Puppeteer.HTTPRequest): Pro
     return cookieJar;
 }
 
-export async function setCookieByHeaders(request: Puppeteer.HTTPRequest, rawCookies: string[]): Promise<void> {
+export async function setCookieByHeaders(request: Puppeteer.HTTPRequest, rawCookies: string | string[]): Promise<void> {
     const { url, client, domain } = getInitialVariables(request);
 
+    if (typeof rawCookies === 'string') rawCookies = [rawCookies];
     const browserCookies = rawCookies.map(header => parseCookieHeader(header, domain));
 
     // Delete old cookies before setting new ones

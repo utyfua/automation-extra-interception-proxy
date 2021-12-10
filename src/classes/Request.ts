@@ -8,6 +8,7 @@ import {
 import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
 import { InterceptionProxyResponse } from './Response';
 import { getCookieJarByRequest } from '../utils/cookies'
+import { adjustRequestCorsHeaders } from '../utils/cors'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
 
 @applyConfigurableMixin
@@ -57,9 +58,11 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         const requestOptions: IRequestOptions = {
             method: originalRequest.method() as IRequestOptions["method"],
             url: originalRequest.url(),
-            headers: originalRequest.headers(),
+            headers: { ...originalRequest.headers() },
             body: originalRequest.postData(),
         };
+
+        adjustRequestCorsHeaders(initial, requestOptions);
 
         try {
             requestOptions.cookieJar = await getCookieJarByRequest(originalRequest);

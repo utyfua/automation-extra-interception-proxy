@@ -122,13 +122,12 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
     }
     async continue(): Promise<void> {
         this.stage = RequestStage.sentResponse;
+        const response = this.responseOptions;
         try {
-            const response = this.responseOptions;
             if ("body" in response) {
                 const cookieHeader = response.headers["set-cookie"];
                 if (cookieHeader) {
                     // TODO: (T3) find a way to set the contentType without ts-ignore
-                    // @ts-ignore
                     await setCookieByHeaders(this.originalRequest, cookieHeader);
                     response.headers["set-cookie"] = undefined;
                 }
@@ -148,8 +147,15 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
                 );
             }
         } catch (error) {
-            this.emit2('error', error);
             this.stage = RequestStage.closed;
+
+            // @ts-ignore
+            const client = this.originalRequest._client;
+            if (client && !client._connection) {
+                // possibly page was closed, no need to scream
+            } else {
+                this.emit2('error', error);
+            }
         }
     }
 }
