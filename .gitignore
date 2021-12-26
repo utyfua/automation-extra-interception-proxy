@@ -2,3 +2,4 @@ node_modules
 dist
 .vscode/settings.json
 shadows
+package-lock.json
