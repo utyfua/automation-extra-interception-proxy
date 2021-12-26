@@ -38,9 +38,19 @@ Even with cooperative mode you can not make your decisions asynchronously. Here 
     Update this documentation by updating the source code.
 -->
 
-## Table of Contents
+### Table of Contents
 
----
+-   [wrapPage(page)](#wrappagepage)
+
+## [wrapPage(page)](https://github.com/utyfua/automation-extra-interception-proxy/blob/4e469c2c8835b24d6a12fc83801c5f643c353cf9/src/index.ts#L17-L19)
+
+-   `page` **Puppeteer.Page** Page for future interceptions
+
+Returns: **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;InterceptionProxyPageConfig>** 
+
+Add interception ability to the page ([sample](https://github.com/utyfua/automation-extra-interception-proxy/blob/master/samples/singlePageInterception.js))
+
+* * *
 
 # Motivation
 

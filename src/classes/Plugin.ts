@@ -35,7 +35,7 @@ class InterceptionProxyPlugin extends PluginBase {
         browser[INTERCEPTION_KEY_HOOK].proceedNewPage(page);
     }
 
-    /** Add additions to already existing pages and frames */
+    // Add additions to already existing pages and frames
     async onBrowser(browser: Puppeteer.Browser) {
         // @ts-ignore
         browser[INTERCEPTION_KEY_HOOK] = new InterceptionProxyBrowserConfig(this)

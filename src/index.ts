@@ -9,6 +9,11 @@ export {
     Plugin as AutomationExtraInterceptionProxyPlugin,
 }
 
-export async function wrapPage(page: Puppeteer.Page) {
+/**
+ * Add interception ability to the page [(sample)](https://github.com/utyfua/automation-extra-interception-proxy/blob/master/samples/singlePageInterception.js)
+ *
+ * @param page Page for future interceptions
+ */
+export async function wrapPage(page: Puppeteer.Page): Promise<InterceptionProxyPageConfig> {
     return await InterceptionProxyPageConfig.proceedNewPage(undefined, page);
 }
