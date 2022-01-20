@@ -49,7 +49,7 @@ export const parseCookieHeader = (rawCookie: string, domain: string) => {
             case "samesite":
                 const firstChar = value[0].toUpperCase();
                 const restChars = value.slice(1).toLowerCase();
-                // TODO: (T6) find a way to set the contentType without ts-ignore
+                // TODO: (T6) find a way to set the variable without ts-ignore
                 // @ts-ignore
                 cookie.sameSite = firstChar + restChars;
                 break;

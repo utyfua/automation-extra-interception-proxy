@@ -2,6 +2,22 @@ import type { Method, Headers } from 'got'
 import type { ErrorCode } from 'puppeteer'
 import type { CookieJar } from 'tough-cookie';
 
+export enum RequestMode {
+    /**
+     * Plugin will do nothing about original request
+     */
+    ignore = 'ignore',
+    /**
+     * Plugin will just listen to the original request/response data and all requests will fulfilled by puppeteer itself.
+     * But some plugin functionality can be unavailable.
+     */
+    native = 'native',
+    /**
+     * Plugin will do all requests by himself. All plugin features will be available.
+     */
+    managed = 'managed',
+}
+
 export enum RequestStage {
     /**
      * We just got a new request from the puppeteer and getting additional information about it.
@@ -80,7 +96,7 @@ export interface IRequestOptions {
 export interface IResponseOverrides {
     status: number;
     headers: Headers;
-    contentType: string | undefined;
+    // contentType: string | undefined;
     body: string | Buffer;
 }
 

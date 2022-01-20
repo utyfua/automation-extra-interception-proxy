@@ -1,5 +1,5 @@
 module.exports = {
-    "transform": {
-        "^.+\\.(ts|tsx)$": "ts-jest"
-    },
+    testTimeout: 60000,
+    preset: 'jest-puppeteer',
+    testMatch: ["**/test/**/?(*.)+(spec|test).[jt]s?(x)"],
 }

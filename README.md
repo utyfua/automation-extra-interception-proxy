@@ -40,17 +40,274 @@ Even with cooperative mode you can not make your decisions asynchronously. Here 
 
 ### Table of Contents
 
--   [wrapPage(page)](#wrappagepage)
+-   [wrapPage(page, config?)](#wrappagepage-config)
+-   [cooperativePriority](#cooperativepriority)
+-   [requestMode](#requestmode)
+-   [continue()](#continue)
+-   [NPM_PACKAGE_NAME()](#npm_package_name)
+-   [flushLocal(key?)](#flushlocalkey)
+-   [recordError(message, error?, meta)](#recorderrormessage-error-meta)
+-   [recordInternalError(message, meta)](#recordinternalerrormessage-meta)
+-   [recordWarn(message, meta)](#recordwarnmessage-meta)
+-   [ignore](#ignore)
+-   [native](#native)
+-   [managed](#managed)
+-   [gotRequest](#gotrequest)
+-   [gotRequest](#gotrequest-1)
+-   [sentRequest](#sentrequest)
+-   [gotResponse](#gotresponse)
+-   [sentResponse](#sentresponse)
+-   [closed](#closed)
+-   [method](#method)
+-   [url](#url)
+-   [headers](#headers)
+-   [body](#body)
+-   [IAbortReason()](#iabortreason)
 
-## [wrapPage(page)](https://github.com/utyfua/automation-extra-interception-proxy/blob/4e469c2c8835b24d6a12fc83801c5f643c353cf9/src/index.ts#L17-L19)
+## wrapPage(page, config?)
 
 -   `page` **Puppeteer.Page** Page for future interceptions
+-   `config` **IConfig?**
 
-Returns: **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;InterceptionProxyPageConfig>** 
+Returns: **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;InterceptionProxyPageConfig>**
 
-Add interception ability to the page ([sample](https://github.com/utyfua/automation-extra-interception-proxy/blob/master/samples/singlePageInterception.js))
+Add interception ability to the page [(sample)](https://github.com/utyfua/automation-extra-interception-proxy/blob/master/samples/singlePageInterception.js)
 
-* * *
+---
+
+## cooperativePriority
+
+Type: **([undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined) \| [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number))**
+
+Puppeteer' "Cooperative Intercept Mode" `priority`
+
+This package using own way to manage cooperation
+
+Use only if you know what it does
+
+[\[Rear more\]](https://github.com/puppeteer/puppeteer/blob/v10.2.0/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
+
+---
+
+## requestMode
+
+Type: **RequestMode**
+
+`ignore` - Plugin will do nothing about original request
+
+`native` - Plugin will just listen to the original request/response data and all requests will fulfilled by puppeteer itself. But some plugin functionality can be unavailable.
+
+`managed` - Plugin will do all requests by `requestHandlers` or by himself. All plugin features will be available.
+
+---
+
+## continue()
+
+Returns: **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;void>**
+
+Will send gathered response back to the puppeteer immediately
+
+If response not collected yet will call getResponse first.
+
+---
+
+## NPM_PACKAGE_NAME()
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+---
+
+## flushLocal(key?)
+
+-   `key` **any?** If provided will flush only specific parameter at local level
+
+Returns: **void**
+
+Flush local configuration
+
+---
+
+## recordError(message, error?, meta)
+
+-   `message` **any** Flow description
+-   `error` **any?** Original error object
+-   `meta` **...any** non specific meta information
+
+Returns: **void**
+
+Pass an error to the logger
+
+---
+
+## recordInternalError(message, meta)
+
+-   `message` **any** Flow/error description
+-   `meta` **...any** non specific meta information
+
+Returns: **void**
+
+Pass an internal error to the logger
+
+---
+
+## recordWarn(message, meta)
+
+-   `message` **any** Flow/error description
+-   `meta` **...any** non specific meta information
+
+Returns: **void**
+
+Pass an warn to the logger
+
+---
+
+## ignore
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+Plugin will do nothing about original request
+
+---
+
+## native
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+Plugin will just listen to the original request/response data and all requests will fulfilled by puppeteer itself.
+But some plugin functionality can be unavailable.
+
+---
+
+## managed
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+Plugin will do all requests by himself. All plugin features will be available.
+
+---
+
+## gotRequest
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+We just got a new request from the puppeteer and getting additional information about it.
+
+---
+
+## gotRequest
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+We got a new request from the puppeteer witch includes all necessary information about.
+
+At this stage we can adjust request.
+
+---
+
+## sentRequest
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+The request in requesting process
+
+At this stage we unable to adjust request but still have not response to go forward.
+
+---
+
+## gotResponse
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+We got response from the request witch probably was modified by the user and now user can adjust the response.
+
+At this stage we can adjust response.
+At this stage the user will unable to override the request anymore.
+
+---
+
+## sentResponse
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+We sent final response of the request to the browser.
+
+Its too late to adjust request or response.
+
+---
+
+## closed
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+Page were closed and we unable do anything
+
+From technical perspective `sentResponse` looks just the same
+
+---
+
+## method
+
+Type: **Method**
+
+Request method.
+
+If request were executed you will unable to change this property.
+
+---
+
+## url
+
+Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+Request url.
+
+If request were executed you will unable to change this property.
+
+---
+
+## headers
+
+Type: **[Headers](https://developer.mozilla.org/docs/Web/HTML/Element/header)**
+
+Request headers.
+
+If request were executed you will unable to change this property.
+
+---
+
+## body
+
+Type: **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Buffer](https://nodejs.org/api/buffer.html) \| [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))**
+
+Request body.
+
+If request were executed you will unable to change this property.
+
+---
+
+## IAbortReason()
+
+Type: **ErrorCode**
+
+This option will override the response
+
+-   `aborted` - An operation was aborted (due to user action).
+-   `accessdenied` - Permission to access a resource, other than the network, was denied.
+-   `addressunreachable` - The IP address is unreachable. This usually means
+    that there is no route to the specified host or network.
+-   `blockedbyclient` - The client chose to block the request.
+-   `blockedbyresponse` - The request failed because the response was delivered along with requirements which are not met ('X-Frame-Options' and 'Content-Security-Policy' ancestor checks, for instance).
+-   `connectionaborted` - A connection timed out as a result of not receiving an ACK for data sent.
+-   `connectionclosed` - A connection was closed (corresponding to a TCP FIN).
+-   `connectionfailed` - A connection attempt failed.
+-   `connectionrefused` - A connection attempt was refused.
+-   `connectionreset` - A connection was reset (corresponding to a TCP RST).
+-   `internetdisconnected` - The Internet connection has been lost.
+-   `namenotresolved` - The host name could not be resolved.
+-   `timedout` - An operation timed out.
+-   `failed` - A generic failure occurred.
+
+---
 
 # Motivation
 
@@ -58,22 +315,26 @@ We live in the world where almost each website have internal api. When you are l
 
 # TODO:
 
--   aborting request api
--   request.setResponse api
--   request wrapping api
-
--   fix non frame request(ex <https://2ip.ru/privacy/>)
+-   finalize cors managed requests - need to pass cors test
 -   add tests
--   -   cors
+-   -   plugin flow
 -   -   [cookies](https://github.com/puppeteer/puppeteer/blob/main/test/cookies.spec.ts)
 -   documentation
+-   -   improve `docs` command
+-   -   describe `wrapPage`
+-   -   describe `InterceptionProxyPlugin` class
 -   add more proxy api
--   add new puppeteer page interfaces via global types
+-   -   waitRequest
 -   data url support
 -   websocket support
--   single page interception api
 -   migrate to [automation-extra-plugin](https://www.npmjs.com/package/automation-extra-plugin)
 
+<!--
 # notes?
 
 More specified example. We have Google ReCaptcha to solve. But when you going to automate this thing you will got an error. From first looks it will looks like... TODO?
+-->
+
+# License
+
+Copyright © 2021 - 2022, Utyfua. Released under the MIT License.

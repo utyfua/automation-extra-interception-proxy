@@ -1,10 +1,11 @@
+import type Puppeteer from 'puppeteer'
 import EventEmitter from 'events';
 import {
     AUTHOR_NEW_ISSUE_URL, NPM_PACKAGE_NAME,
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
     RequestStage,
     IInterceptionProxyRequest, IInterceptionProxyResponse,
-    IResponseOverrides, IAbortOverrides, IResponseOptions, IAbortReason
+    IResponseOverrides, IAbortOverrides, IResponseOptions, IAbortReason, RequestMode
 } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
 import { setCookieByHeaders } from '../utils/cookies'
@@ -18,7 +19,7 @@ class ResponseBase extends EventEmitter { }
 interface ResponseBase extends
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
     Partial<IResponseOverrides>, Partial<IAbortOverrides> { }
-for (let key of ['status', 'headers', 'contentType', 'body', 'abortReason']) {
+for (let key of ['status', 'headers', /*'contentType',*/ 'body', 'abortReason']) {
     Object.defineProperty(ResponseBase.prototype, key, {
         get: function () {
             return this.responseOptions[key];
@@ -33,8 +34,9 @@ for (let key of ['status', 'headers', 'contentType', 'body', 'abortReason']) {
 
 
 class InterceptionProxyResponse extends ResponseBase implements IInterceptionProxyResponse {
-    // @ts-ignore
-    emit2(eventName, payload) {
+    originalResponse?: Puppeteer.HTTPResponse = undefined;
+
+    emit2(eventName: string, payload: any) {
         this.emit(eventName, payload);
         this.__parent.emit(eventName, payload);
     }
@@ -80,7 +82,32 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
                 error, request.url);
         }
 
-        return new InterceptionProxyResponse(request, responseOptions);
+        const response = new InterceptionProxyResponse(request, responseOptions)
+
+        return response;
+    }
+
+    static async proceedOriginalResponse(
+        request: IInterceptionProxyRequest,
+        originalResponse: Puppeteer.HTTPResponse
+    ): Promise<IInterceptionProxyResponse> {
+        const responseOptions: IResponseOverrides = {
+            status: originalResponse.status(),
+            headers: originalResponse.headers(),
+            body: `${NPM_PACKAGE_NAME}: Unable to get original response`,
+        };
+
+        try {
+            responseOptions.body = await originalResponse.buffer()
+        } catch (e) {
+            // console.dir(e);
+            // Could not load body for this request. This might happen if the request is a pre a preflight request.
+        }
+
+        const response = new InterceptionProxyResponse(request, responseOptions)
+        response.originalResponse = originalResponse
+
+        return response;
     }
 
     getRequest() { return this.__parent }
@@ -121,13 +148,19 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         return this;
     }
     async continue(): Promise<void> {
+        // prevent processing for already handled requests
+        if (!this.isResponseOverrideAvailable) {
+            if (this.requestMode !== RequestMode.managed) return;
+            // TODO: warn?
+            return;
+        }
+
         this.stage = RequestStage.sentResponse;
         const response = this.responseOptions;
         try {
             if ("body" in response) {
                 const cookieHeader = response.headers["set-cookie"];
                 if (cookieHeader) {
-                    // TODO: (T3) find a way to set the contentType without ts-ignore
                     await setCookieByHeaders(this.originalRequest, cookieHeader);
                     response.headers["set-cookie"] = undefined;
                 }

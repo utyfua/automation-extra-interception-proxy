@@ -9,12 +9,10 @@ export function applyNetworkMixin(base: any): any {
             return [
                 // RequestStage.initial,
                 RequestStage.gotRequest,
-                //@ts-ignore
             ].includes(this.stage);
         }
 
         get isResponseCollecting() {
-            //@ts-ignore
             return this.stage === RequestStage.sentRequest;
         }
 
@@ -22,7 +20,6 @@ export function applyNetworkMixin(base: any): any {
             return [
                 RequestStage.gotResponse,
                 RequestStage.sentResponse,
-                //@ts-ignore
             ].includes(this.stage);
         }
 
@@ -31,7 +28,6 @@ export function applyNetworkMixin(base: any): any {
                 RequestStage.gotRequest,
                 RequestStage.sentRequest,
                 RequestStage.gotResponse,
-                //@ts-ignore
             ].includes(this.stage);
         }
 
@@ -39,7 +35,6 @@ export function applyNetworkMixin(base: any): any {
             return [
                 RequestStage.sentResponse,
                 RequestStage.closed,
-                //@ts-ignore
             ].includes(this.stage);
         }
 

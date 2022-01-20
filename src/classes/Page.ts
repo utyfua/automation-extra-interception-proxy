@@ -1,5 +1,5 @@
 import type Puppeteer from 'puppeteer'
-import { IInterceptionProxyPage, IInterceptionProxyBrowser, INTERCEPTION_KEY_HOOK } from '../interfaces'
+import { IInterceptionProxyPage, INTERCEPTION_KEY_HOOK, IConfig } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin } from '../mixins'
 import { InterceptionProxyRequest } from './Request'
 
@@ -10,17 +10,20 @@ class PageBase { }
 interface PageBase extends IInterceptionProxyPage { }
 
 class InterceptionProxyPageConfig extends PageBase {
-    protected __parent?: IInterceptionProxyBrowser;
+    protected __parent?: Partial<IConfig>;
 
-    constructor(__parent: IInterceptionProxyBrowser | undefined, readonly page: Puppeteer.Page) {
+    constructor(readonly page: Puppeteer.Page, __parent?: IConfig) {
         super();
         this.__parent = __parent;
     }
 
-    static async proceedNewPage(__parent: IInterceptionProxyBrowser | undefined, page: Puppeteer.Page) {
-        const interceptionConfig = new InterceptionProxyPageConfig(__parent, page);
+    static async proceedNewPage(page: Puppeteer.Page, __parent?: IConfig) {
+        if (page[INTERCEPTION_KEY_HOOK]) {
+            throw new Error('Interception hook already registered.');
+        }
 
-        // @ts-ignore
+        const interceptionConfig = new InterceptionProxyPageConfig(page, __parent);
+
         page[INTERCEPTION_KEY_HOOK] = interceptionConfig;
 
         page.on('request', (originalRequest: Puppeteer.HTTPRequest) => {

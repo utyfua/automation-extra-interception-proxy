@@ -1,5 +1,5 @@
 import type Puppeteer from 'puppeteer' // ContinueRequestOverrides
-import { IResponseOptions } from './network'
+import { IResponseOptions, RequestMode } from './network'
 
 export interface ILogObject {
     level: 'error' | 'warning' | 'info' | 'debug',
@@ -34,20 +34,28 @@ export interface IRequestEventOptionsMap {
 
 export interface IConfig {
     /**
-     * Puppeteer` "Cooperative Intercept Mode" `priority`
+     * Puppeteer' "Cooperative Intercept Mode" `priority`
      *
      * This package using own way to manage cooperation
      *
      * Use only if you know what it does
      *
-     * [[More]](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
+     * [[Rear more]](https://github.com/puppeteer/puppeteer/blob/v10.2.0/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
      */
     cooperativePriority: undefined | number;
+    /**
+     * `ignore` - Plugin will do nothing about original request
+     *
+     * `native` - Plugin will just listen to the original request/response data and all requests will fulfilled by puppeteer itself. But some plugin functionality can be unavailable.
+     *
+     * `managed` - Plugin will do all requests by `requestHandlers` or by himself. All plugin features will be available.
+     */
+    requestMode: RequestMode;
     proxy: any; // TODO: fill missing type
     logger: typeof Logger;
     timeout: number;
     // attempts: number;
-    continueIfPossible: boolean;
+    nativeContinueIfPossible: boolean;
     requestHandlers: IRequestHandlerOptions[];
     requestListeners: IRequestListenerOptions[];
 }

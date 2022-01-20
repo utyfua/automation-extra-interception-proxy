@@ -17,7 +17,6 @@ export function applyLoggableMixin(base: any): any {
             error?: ILogObject["error"],
             ...meta: ILogObject["meta"]
         ) {
-            // @ts-ignore: we will be merged within `ConfigurableMixin`
             this.logger({
                 level: 'error',
                 message,
@@ -32,6 +31,17 @@ export function applyLoggableMixin(base: any): any {
         ) {
             const error = new Error(message);
             this.recordError(message, error, ...meta)
+        }
+
+        recordWarn(
+            message: ILogObject["message"],
+            ...meta: ILogObject["meta"]
+        ) {
+            this.logger({
+                level: 'warn',
+                message,
+                meta,
+            })
         }
     }
     return LoggableMixin

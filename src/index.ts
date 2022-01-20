@@ -1,5 +1,7 @@
 import type Puppeteer from 'puppeteer'
 
+import { IConfig } from './interfaces';
+
 import { Plugin } from './classes/Plugin';
 import { InterceptionProxyPageConfig } from './classes/Page';
 
@@ -14,6 +16,6 @@ export {
  *
  * @param page Page for future interceptions
  */
-export async function wrapPage(page: Puppeteer.Page): Promise<InterceptionProxyPageConfig> {
-    return await InterceptionProxyPageConfig.proceedNewPage(undefined, page);
+export async function wrapPage(page: Puppeteer.Page, config?: IConfig): Promise<InterceptionProxyPageConfig> {
+    return await InterceptionProxyPageConfig.proceedNewPage(page, config);
 }

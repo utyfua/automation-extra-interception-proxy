@@ -1,0 +1,605 @@
+{
+    "result": {
+        "fail cors GET request": {
+            "errorMessage": "Network Error",
+            "id": "fail cors GET request",
+            "request": {}
+        },
+        "fail origin cors GET request": {
+            "errorMessage": "Network Error",
+            "id": "fail origin cors GET request",
+            "request": {
+                "params": {
+                    "cors": {
+                        "origin": "http://fail.domain"
+                    }
+                }
+            }
+        },
+        "fail remote DELETE request": {
+            "errorMessage": "Network Error",
+            "id": "fail remote DELETE request",
+            "request": {
+                "method": "DELETE",
+                "params": {
+                    "cors": {
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            }
+        },
+        "fail remote request with credentials": {
+            "errorMessage": "Network Error",
+            "id": "fail remote request with credentials",
+            "request": {
+                "params": {
+                    "cors": {
+                        "origin": "http://localhost:3000"
+                    }
+                },
+                "withCredentials": true
+            }
+        },
+        "fail remote request with no header cors": {
+            "errorMessage": "Network Error",
+            "id": "fail remote request with no header cors",
+            "request": {
+                "headers": {
+                    "X-Test-Header": "test"
+                },
+                "params": {
+                    "cors": {
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            }
+        },
+        "fail remote request with unknown Header": {
+            "errorMessage": "Network Error",
+            "id": "fail remote request with unknown Header",
+            "request": {
+                "headers": {
+                    "X-Test-Header": "test"
+                },
+                "params": {
+                    "cors": {
+                        "headers": "X-Test-Header-2",
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            }
+        },
+        "pass 404 GET request": {
+            "errorMessage": "Request failed with status code 404",
+            "id": "pass 404 GET request",
+            "request": {
+                "params": {
+                    "httpCode": 404
+                }
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "localhost:3000",
+                        "referer": "http://localhost:3000/cors.html",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "same-origin",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "httpCode": "404"
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 404
+            }
+        },
+        "pass all features combined": {
+            "id": "pass all features combined",
+            "request": {
+                "headers": {
+                    "X-Test-Header": "test"
+                },
+                "method": "PUT",
+                "params": {
+                    "cors": {
+                        "allowCredentials": true,
+                        "headers": "X-Test-Header",
+                        "methods": "PUT",
+                        "origin": "http://localhost:3000"
+                    }
+                },
+                "withCredentials": true
+            },
+            "response": {
+                "data": {
+                    "corsOptionsReq": {
+                        "headers": {
+                            "accept": "*/*",
+                            "accept-encoding": "gzip, deflate, br",
+                            "accept-language": "testServer mock: 'accept-language' exist",
+                            "access-control-request-headers": "x-test-header",
+                            "access-control-request-method": "PUT",
+                            "connection": "keep-alive",
+                            "host": "127.0.0.1:3000",
+                            "origin": "http://localhost:3000",
+                            "referer": "http://localhost:3000/",
+                            "sec-fetch-dest": "empty",
+                            "sec-fetch-mode": "cors",
+                            "sec-fetch-site": "cross-site",
+                            "user-agent": "testServer mock: 'user-agent' exist"
+                        },
+                        "method": "OPTIONS",
+                        "query": {
+                            "cors": {
+                                "allowCredentials": true,
+                                "headers": "X-Test-Header",
+                                "methods": "PUT",
+                                "origin": "http://localhost:3000"
+                            }
+                        }
+                    },
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "content-length": "0",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist",
+                        "x-test-header": "test"
+                    },
+                    "method": "PUT",
+                    "query": {
+                        "cors": {
+                            "allowCredentials": true,
+                            "headers": "X-Test-Header",
+                            "methods": "PUT",
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass asterisk cors GET request": {
+            "id": "pass asterisk cors GET request",
+            "request": {
+                "params": {
+                    "cors": {
+                        "origin": "*"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "cors": {
+                            "origin": "*"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass cors GET request": {
+            "id": "pass cors GET request",
+            "request": {
+                "params": {
+                    "cors": {
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "cors": {
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass local request": {
+            "id": "pass local request",
+            "request": {},
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "localhost:3000",
+                        "referer": "http://localhost:3000/cors.html",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "same-origin",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {}
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass origin cors GET request": {
+            "id": "pass origin cors GET request",
+            "request": {
+                "params": {
+                    "cors": {
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "cors": {
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass remote DELETE request": {
+            "id": "pass remote DELETE request",
+            "request": {
+                "method": "DELETE",
+                "params": {
+                    "cors": {
+                        "methods": "DELETE",
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "corsOptionsReq": {
+                        "headers": {
+                            "accept": "*/*",
+                            "accept-encoding": "gzip, deflate, br",
+                            "accept-language": "testServer mock: 'accept-language' exist",
+                            "access-control-request-method": "DELETE",
+                            "connection": "keep-alive",
+                            "host": "127.0.0.1:3000",
+                            "origin": "http://localhost:3000",
+                            "referer": "http://localhost:3000/",
+                            "sec-fetch-dest": "empty",
+                            "sec-fetch-mode": "cors",
+                            "sec-fetch-site": "cross-site",
+                            "user-agent": "testServer mock: 'user-agent' exist"
+                        },
+                        "method": "OPTIONS",
+                        "query": {
+                            "cors": {
+                                "methods": "DELETE",
+                                "origin": "http://localhost:3000"
+                            }
+                        }
+                    },
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "DELETE",
+                    "query": {
+                        "cors": {
+                            "methods": "DELETE",
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass remote POST request": {
+            "id": "pass remote POST request",
+            "request": {
+                "method": "POST",
+                "params": {
+                    "cors": {
+                        "methods": "POST",
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "content-length": "0",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "POST",
+                    "query": {
+                        "cors": {
+                            "methods": "POST",
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass remote request with Header": {
+            "id": "pass remote request with Header",
+            "request": {
+                "headers": {
+                    "X-Test-Header": "test"
+                },
+                "params": {
+                    "cors": {
+                        "headers": "X-Test-Header",
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "corsOptionsReq": {
+                        "headers": {
+                            "accept": "*/*",
+                            "accept-encoding": "gzip, deflate, br",
+                            "accept-language": "testServer mock: 'accept-language' exist",
+                            "access-control-request-headers": "x-test-header",
+                            "access-control-request-method": "GET",
+                            "connection": "keep-alive",
+                            "host": "127.0.0.1:3000",
+                            "origin": "http://localhost:3000",
+                            "referer": "http://localhost:3000/",
+                            "sec-fetch-dest": "empty",
+                            "sec-fetch-mode": "cors",
+                            "sec-fetch-site": "cross-site",
+                            "user-agent": "testServer mock: 'user-agent' exist"
+                        },
+                        "method": "OPTIONS",
+                        "query": {
+                            "cors": {
+                                "headers": "X-Test-Header",
+                                "origin": "http://localhost:3000"
+                            }
+                        }
+                    },
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist",
+                        "x-test-header": "test"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "cors": {
+                            "headers": "X-Test-Header",
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass remote request with credentials": {
+            "id": "pass remote request with credentials",
+            "request": {
+                "params": {
+                    "cors": {
+                        "allowCredentials": true,
+                        "origin": "http://localhost:3000"
+                    }
+                },
+                "withCredentials": true
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "cors": {
+                            "allowCredentials": true,
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        },
+        "pass with custom Accept header": {
+            "id": "pass with custom Accept header",
+            "request": {
+                "headers": {
+                    "Accept": "Margarine"
+                },
+                "params": {
+                    "cors": {
+                        "headers": "Accept",
+                        "origin": "http://localhost:3000"
+                    }
+                }
+            },
+            "response": {
+                "data": {
+                    "headers": {
+                        "accept": "Margarine",
+                        "accept-encoding": "gzip, deflate, br",
+                        "accept-language": "testServer mock: 'accept-language' exist",
+                        "connection": "keep-alive",
+                        "host": "127.0.0.1:3000",
+                        "origin": "http://localhost:3000",
+                        "referer": "http://localhost:3000/",
+                        "sec-ch-ua": "testServer mock: 'sec-ch-ua' exist",
+                        "sec-ch-ua-mobile": "testServer mock: 'sec-ch-ua-mobile' exist",
+                        "sec-ch-ua-platform": "testServer mock: 'sec-ch-ua-platform' exist",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "cross-site",
+                        "user-agent": "testServer mock: 'user-agent' exist"
+                    },
+                    "method": "GET",
+                    "query": {
+                        "cors": {
+                            "headers": "Accept",
+                            "origin": "http://localhost:3000"
+                        }
+                    }
+                },
+                "headers": {
+                    "content-type": "application/json; charset=utf-8"
+                },
+                "status": 200
+            }
+        }
+    }
+}

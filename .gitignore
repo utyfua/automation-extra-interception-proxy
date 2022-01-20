@@ -1,5 +1,6 @@
-node_modules
-dist
-.vscode/settings.json
-shadows
-package-lock.json
+/node_modules
+/dist
+/.vscode/settings.json
+/shadows
+/package-lock.json
+/yarn.lock

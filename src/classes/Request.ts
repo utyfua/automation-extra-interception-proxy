@@ -1,9 +1,10 @@
+import type Puppeteer from 'puppeteer'
 import EventEmitter from 'events';
 import {
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
     IInterceptionProxyRequest, INewRequestInitialArgs, IRequestOptions,
     RequestStage, IAbortReason, IInterceptionProxyResponse, IResponseOptions,
-    IResponseOverrides,
+    IResponseOverrides, RequestMode,
 } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
 import { InterceptionProxyResponse } from './Response';
@@ -23,7 +24,7 @@ for (let key of ['method', 'url', 'headers', 'body', 'cookieJar']) {
             return this.requestOptions[key];
         },
         set: function (value) {
-            return this.__requestSetter(key, value);
+            return this.__requestOptionSetter(key, value);
         },
         enumerable: true,
         configurable: true
@@ -31,8 +32,7 @@ for (let key of ['method', 'url', 'headers', 'body', 'cookieJar']) {
 }
 
 class InterceptionProxyRequest extends RequestBase implements IInterceptionProxyRequest {
-    // @ts-ignore
-    emit2(eventName, payload) {
+    emit2(eventName: string, payload: any) {
         this.emit(eventName, payload);
         this.__response?.emit(eventName, payload);
     }
@@ -43,6 +43,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
     protected __stage: RequestStage;
     protected __parent;
     protected __response?: IInterceptionProxyResponse;
+    protected __isAdjusted: boolean = false;
 
     constructor(initial: INewRequestInitialArgs, requestOptions: IRequestOptions) {
         super();
@@ -54,7 +55,18 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
     }
 
     static async proceedNewRequest(initial: INewRequestInitialArgs) {
-        const { originalRequest, __parent } = initial;
+        const { originalRequest, __parent, page } = initial;
+
+        let originalResponse: Puppeteer.HTTPResponse | null = null;
+        let proceedResponse = async (_originalResponse: Puppeteer.HTTPResponse) => {
+            originalResponse = _originalResponse;
+        }
+        const onNativeResponse = (_originalResponse: Puppeteer.HTTPResponse) => {
+            if (_originalResponse.request() !== originalRequest) return;
+            proceedResponse(_originalResponse);
+        }
+        page.on('response', onNativeResponse);
+
         const requestOptions: IRequestOptions = {
             method: originalRequest.method() as IRequestOptions["method"],
             url: originalRequest.url(),
@@ -79,6 +91,20 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
 
         const request = new InterceptionProxyRequest(initial, requestOptions);
 
+        // native response listener handlers
+        request.once('responseInstance', () => {
+            page.off('response', onNativeResponse);
+        });
+        proceedResponse = async (originalResponse: Puppeteer.HTTPResponse) => {
+            request.stage = RequestStage.sentRequest;
+            const response = await InterceptionProxyResponse.proceedOriginalResponse(request, originalResponse);
+
+            request._setResponseInstance(response, RequestMode.native);
+        }
+        if (originalResponse) {
+            await proceedResponse(originalResponse);
+            originalResponse = null;
+        }
 
         for (let handlerObj of request.requestListeners) {
             try {
@@ -107,13 +133,36 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         if (!this.isRequestOverrideAvailable) {
             throw new Error(getStageEnhancedErrorMessage(key, this.stage))
         }
+        if (this.requestMode !== RequestMode.managed) {
+            this.recordWarn(
+                `Possibly the request will not be upgraded by your "${key}" ` +
+                `because current mode ${this.requestMode} does not support this ability. ` +
+                `Please set "requestMode" variable to "${RequestMode.managed}" and then try again.`);
+        }
+
+        if (!this.__isAdjusted) this.__isAdjusted = true;
+
         this.requestOptions[key] = value;
         this.emit2(key, value);
         this.emit2('requestOptions', this.requestOptions);
     }
 
-    async _getResponseInstance(responseOptions?: IResponseOptions): Promise<IInterceptionProxyResponse> {
-        if (this.__response || this.isResponseCollecting) {
+    protected async _getResponseInstance(responseOptions?: IResponseOptions): Promise<IInterceptionProxyResponse> {
+        const { requestMode } = this;
+
+        // @ts-ignore: we are not much care about ignoring requests
+        if (requestMode === RequestMode.ignore) return null;
+
+        if (
+            this.isRequestOverrideAvailable &&
+            (this.requestMode === RequestMode.native ||
+                (!this.__response && !this.__isAdjusted && this.nativeContinueIfPossible))
+        ) {
+            this.stage = RequestStage.sentRequest;
+            this.originalRequest.continue(undefined, this.cooperativePriority);
+        }
+
+        if (this.__response || this.isResponseCollecting || requestMode === RequestMode.native) {
             const response: IInterceptionProxyResponse =
                 this.__response || await new Promise(c => this.once('responseInstance', c));
 
@@ -127,12 +176,20 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         this.stage = RequestStage.sentRequest;
         const response = await InterceptionProxyResponse.proceedNewResponse(this, responseOptions);
 
-        this.__response = response;
-        this.stage = RequestStage.gotResponse;
-        this.emit2('responseInstance', response);
+        this._setResponseInstance(response);
 
         return response;
     };
+
+    /**
+     * If its managed response we can modify data until it will be not sent to puppeteer,
+     * but in another case it will be finale version of response
+     */
+    protected _setResponseInstance(response: IInterceptionProxyResponse, mode: RequestMode = RequestMode.managed) {
+        this.__response = response;
+        this.stage = mode === RequestMode.managed ? RequestStage.gotResponse : RequestStage.sentResponse;
+        this.emit2('responseInstance', response);
+    }
 
     getRequest(): IInterceptionProxyRequest {
         return this;
@@ -140,7 +197,8 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
     async setResponse(response: IResponseOverrides) {
         return await this._getResponseInstance(response);
     }
-    async getResponse() {
+    async getResponse({ requestMode }: { requestMode?: RequestMode } = {}) {
+        if (requestMode) this.requestMode = requestMode;
         return await this._getResponseInstance();
     }
     async abort(abortReason?: IAbortReason) {
@@ -148,12 +206,8 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
     }
 
     async continue() {
-        if (!this.__response && this.continueIfPossible) {
-            this.originalRequest.continue(undefined, this.cooperativePriority);
-            return;
-        }
         const response = await this.getResponse();
-        response.continue();
+        await response.continue();
     }
 }
 

@@ -4,7 +4,7 @@ import {
     IRequestEventOptionsMap,
     IConfigurableHandlerTarget,
     IConfigurableListenerTarget,
-    DEFAULT_KEY, NOOP,
+    DEFAULT_KEY, NOOP, RequestMode,
 } from '../interfaces'
 
 import { baseHttpHandler, baseHttpHandlerKey } from '../handlers/baseHttpHandler'
@@ -13,11 +13,12 @@ import { defaultLogger } from '../utils/logger'
 
 const DefaultConfig: IConfig = {
     cooperativePriority: undefined,
+    requestMode: RequestMode.managed,
     logger: defaultLogger,
     proxy: null,
     timeout: 30000,
     // attempts: 1,
-    continueIfPossible: false,
+    nativeContinueIfPossible: true,
     requestHandlers: [
         {
             key: baseHttpHandlerKey,

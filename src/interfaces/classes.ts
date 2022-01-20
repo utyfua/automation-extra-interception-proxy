@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer' // ContinueRequestOverrides
+import type Puppeteer from 'puppeteer'
 import type EventEmitter from 'events'
 import type { IConfigurableMixin, ILoggableMixin, INetworkMixin } from './mixins'
 import type { RequestStage, IRequestOptions, IResponseOptions, IAbortReason, IResponseOverrides } from './network'
@@ -10,6 +10,7 @@ export interface IInterceptionProxyPlugin extends
 
 export interface IInterceptionProxyBrowser extends
     IConfigurableMixin, ILoggableMixin {
+    proceedNewPage(page: Puppeteer.Page): Promise<IInterceptionProxyPage>
 }
 
 export interface IInterceptionProxyPage extends
@@ -47,6 +48,7 @@ export interface IInterceptionProxyRequest extends
 
 export interface IInterceptionProxyResponse extends
     IInterceptionProxyNetworkEntity, Partial<IResponseOverrides> {
+    originalResponse?: Puppeteer.HTTPResponse,
     responseOptions: IResponseOptions;
     abortReason?: IAbortReason;
 }

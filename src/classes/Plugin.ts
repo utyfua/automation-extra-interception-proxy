@@ -31,13 +31,11 @@ interface PluginBase extends IInterceptionProxyPlugin { }
 class InterceptionProxyPlugin extends PluginBase {
     async onPageCreated(page: Puppeteer.Page) {
         const browser = await page.browser();
-        // @ts-ignore
         browser[INTERCEPTION_KEY_HOOK].proceedNewPage(page);
     }
 
     // Add additions to already existing pages and frames
     async onBrowser(browser: Puppeteer.Browser) {
-        // @ts-ignore
         browser[INTERCEPTION_KEY_HOOK] = new InterceptionProxyBrowserConfig(this)
 
         const pages = await browser.pages()

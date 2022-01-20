@@ -51,6 +51,15 @@ export interface ILoggableMixin {
         message: ILogObject["message"],
         ...meta: ILogObject["meta"]
     ): void
+    /**
+     * Pass an warn to the logger
+     * @param message Flow/error description
+     * @param meta non specific meta information
+     */
+    recordWarn(
+        message: ILogObject["message"],
+        ...meta: ILogObject["meta"]
+    ): void
 }
 
 export interface INetworkMixin {

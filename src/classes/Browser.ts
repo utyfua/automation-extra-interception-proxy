@@ -15,7 +15,7 @@ class InterceptionProxyBrowserConfig extends BrowserBase {
     }
 
     async proceedNewPage(page: Puppeteer.Page) {
-        await InterceptionProxyPageConfig.proceedNewPage(this, page)
+        return await InterceptionProxyPageConfig.proceedNewPage(page, this)
     }
 }
 

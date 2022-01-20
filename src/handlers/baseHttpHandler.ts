@@ -37,7 +37,7 @@ export async function baseHttpHandler(request: IInterceptionProxyRequest): Promi
     return {
         status: gotResponse.statusCode,
         headers: gotResponse.headers,
-        contentType: gotResponse.headers['content-type'],
+        // contentType: gotResponse.headers['content-type'],
         body: gotResponse.body,
     }
 }
