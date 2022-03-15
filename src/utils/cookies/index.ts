@@ -18,7 +18,7 @@ interface initialVariables {
 function getInitialVariables(request: Puppeteer.HTTPRequest): initialVariables {
     const frame = request.frame();
 
-    const url = request.isNavigationRequest() || !frame ? request.url() : frame.url();
+    const url = request.isNavigationRequest() || !frame || !frame.url() ? request.url() : frame.url();
 
     const domain = getDomain(url);
 
