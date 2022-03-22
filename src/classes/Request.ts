@@ -119,7 +119,11 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
             await request.continue();
         } catch (error) {
             request.recordError('Unable to proceed response from interception handler. We will abort the request.', error);
-            await originalRequest.abort('failed', request.cooperativePriority);
+            try {
+                await originalRequest.abort('failed', request.cooperativePriority);
+            } catch (error) {
+                // we already said that something went wrong
+            }
         }
     }
 
@@ -154,15 +158,16 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         if (requestMode === RequestMode.ignore) return null;
 
         if (
-            this.isRequestOverrideAvailable &&
+            this.isRequestOverrideAvailable && !responseOptions &&
             (this.requestMode === RequestMode.native ||
-                (!this.__response && !this.__isAdjusted && this.nativeContinueIfPossible))
+                (this.requestMode === RequestMode.managed && !this.__isAdjusted && this.nativeContinueIfPossible))
         ) {
             this.stage = RequestStage.sentRequest;
             this.originalRequest.continue(undefined, this.cooperativePriority);
         }
 
-        if (this.__response || this.isResponseCollecting || requestMode === RequestMode.native) {
+        if (this.__response || this.isResponseCollecting ||
+            (requestMode === RequestMode.native && !responseOptions)) {
             const response: IInterceptionProxyResponse =
                 this.__response || await new Promise(c => this.once('responseInstance', c));
 
