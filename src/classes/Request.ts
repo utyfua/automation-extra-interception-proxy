@@ -76,9 +76,17 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
 
         adjustRequestCorsHeaders(initial, requestOptions);
 
+        const isRequestClientClosed = (): boolean => {
+            // @ts-ignore: _client is private but we want to get this variable
+            const client: Puppeteer.CDPSession = originalRequest._client;
+            return !client.connection()
+        }
+
         try {
             requestOptions.cookieJar = await getCookieJarByRequest(originalRequest);
         } catch (error) {
+            if (isRequestClientClosed()) return;
+
             __parent.logger({
                 level: 'warning',
                 error: error,
@@ -101,6 +109,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
 
             request._setResponseInstance(response, RequestMode.native);
         }
+
         if (originalResponse) {
             await proceedResponse(originalResponse);
             originalResponse = null;
@@ -111,13 +120,21 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
                 const localRes = await handlerObj.handler(request);
                 if (localRes) break;
             } catch (error) {
+                if (isRequestClientClosed()) return;
+
                 request.recordError(`Your interception handler "${String(handlerObj.key)}" throws an error. ` +
                     `Please wrap your function using try-catch blocks. For now we will ignore an error`, error);
             }
+
+            if (isRequestClientClosed()) return;
         };
+
+
         try {
             await request.continue();
         } catch (error) {
+            if (isRequestClientClosed()) return;
+
             request.recordError('Unable to proceed response from interception handler. We will abort the request.', error);
             try {
                 await originalRequest.abort('failed', request.cooperativePriority);
