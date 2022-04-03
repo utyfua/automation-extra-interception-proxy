@@ -1,8 +1,13 @@
-import type { IConfig, ILogObject, IRequestHandlerOptions, IRequestListenerOptions } from './base'
-
+import type {
+    IConfig, ILogObject,
+    IRequestListener,
+    IRequestHandlerOptions, IRequestListenerOptions
+} from './base'
+import { IInterceptionProxyRequest } from './classes'
 
 export type IConfigurableHandlerTarget = IRequestHandlerOptions["key"] | IRequestHandlerOptions["handler"]
 export type IConfigurableListenerTarget = IRequestListenerOptions["key"] | IRequestListenerOptions["handler"]
+export type IConfigurableWaitRequestReturn = { request: IInterceptionProxyRequest }
 
 export interface IConfigurableMixin extends IConfig {
     addRequestHandler(handlerOptions: IRequestHandlerOptions): void
@@ -22,6 +27,8 @@ export interface IConfigurableMixin extends IConfig {
     // enableRequestListener(target: IConfigurableListenerTarget): void
     // disableListener(target: IConfigurableListenerTarget): void
     deleteLocalRequestListener(target: IConfigurableListenerTarget): boolean
+
+    waitForRequest(filter: IRequestListener, options: { timeout: number }): Promise<IConfigurableWaitRequestReturn>
 
     /**
      * Flush local configuration

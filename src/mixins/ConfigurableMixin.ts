@@ -2,9 +2,12 @@ import {
     IConfig,
     IConfigurableMixin,
     IRequestEventOptionsMap,
+    IRequestListener,
+    IInterceptionProxyRequest,
+    IConfigurableWaitRequestReturn,
     IConfigurableHandlerTarget,
     IConfigurableListenerTarget,
-    DEFAULT_KEY, NOOP, RequestMode,
+     NOOP, RequestMode,
 } from '../interfaces'
 
 import { baseHttpHandler, baseHttpHandlerKey } from '../handlers/baseHttpHandler'
@@ -52,16 +55,16 @@ export function applyConfigurableMixin(base: any): any {
         });
     }
 
-    function getBaseEventListenerConfig() {
+    function getBaseEventListenerConfig(eventName: string) {
         return {
-            key: DEFAULT_KEY,
+            key: Symbol(`Unknown ${eventName}`),
             priority: 1,
             handler: NOOP,
         };
     }
 
     function getEventListenerConfig<T extends keyof IRequestEventOptionsMap>(eventName: T, args: any[]): IRequestEventOptionsMap[T] {
-        let options: IRequestEventOptionsMap[T] = getBaseEventListenerConfig()
+        let options: IRequestEventOptionsMap[T] = getBaseEventListenerConfig(eventName)
 
         let shift = 0;
 
@@ -175,6 +178,45 @@ export function applyConfigurableMixin(base: any): any {
         }
         deleteLocalRequestListener(target: IConfigurableListenerTarget) {
             return this.__deleteLocalEvent('requestListeners', target);
+        }
+
+        waitForRequest(filter: IRequestListener, options: { priority?: number, timeout?: number } = {}): Promise<IConfigurableWaitRequestReturn> {
+            return new Promise<IConfigurableWaitRequestReturn>((_resolve, _reject) => {
+                if (!options.timeout) options.timeout = this.timeout;
+
+                let resolved: boolean = false;
+                const resolve = (error: null | any, result?: IConfigurableWaitRequestReturn): void => {
+                    if (resolved) return;
+                    resolved = true;
+
+                    this.deleteLocalRequestListener(listener);
+
+                    if (timeout !== null) {
+                        clearTimeout(timeout);
+                    }
+
+                    if (!result) {
+                        _reject(error || new Error('Unknown action'))
+                    } else {
+                        _resolve(result)
+                    }
+                }
+
+                const timeout: NodeJS.Timeout | null = options.timeout ?
+                    setTimeout(() => resolve(new Error(`Timeout ${options.timeout} ms`)), options.timeout) : null;
+
+                async function listener(request: IInterceptionProxyRequest) {
+                    try {
+                        if (await filter(request)) {
+                            resolve(null, { request })
+                        }
+                    } catch (error) {
+                        resolve(error)
+                    }
+                }
+
+                this.addRequestListener(options.priority || 0, listener);
+            })
         }
 
         flushLocal(key?: keyof IConfig): void {

@@ -1,4 +1,5 @@
 import type Puppeteer from 'puppeteer' // ContinueRequestOverrides
+import { IInterceptionProxyRequest } from './classes';
 import { IResponseOptions, RequestMode } from './network'
 
 export interface ILogObject {
@@ -17,8 +18,8 @@ export interface IBaseRequestHookOptions {
     // handler: (...args: any[]) => any;
 }
 
-export type IRequestHandler = (...args: any[]) => void | IResponseOptions | Promise<void | IResponseOptions>
-export type IRequestListener = (...args: any[]) => void | true | Promise<void | true>
+export type IRequestHandler = (request: IInterceptionProxyRequest) => void | IResponseOptions | Promise<void | IResponseOptions>
+export type IRequestListener = (request: IInterceptionProxyRequest) => void | true | Promise<void | true>
 
 export interface IRequestHandlerOptions extends IBaseRequestHookOptions {
     handler: IRequestHandler;
