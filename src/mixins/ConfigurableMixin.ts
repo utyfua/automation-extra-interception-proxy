@@ -7,7 +7,7 @@ import {
     IConfigurableWaitRequestReturn,
     IConfigurableHandlerTarget,
     IConfigurableListenerTarget,
-     NOOP, RequestMode,
+    NOOP, RequestMode,
 } from '../interfaces'
 
 import { baseHttpHandler, baseHttpHandlerKey } from '../handlers/baseHttpHandler'
@@ -135,7 +135,7 @@ export function applyConfigurableMixin(base: any): any {
         }
 
         protected __getEventBase<T extends keyof IRequestEventOptionsMap>(eventName: T) {
-            let eventStorage: IConfig[keyof IRequestEventOptionsMap] | undefined = this.__local[eventName];
+            let eventStorage = this.__local[eventName] as IRequestEventOptionsMap[T][] | undefined;
 
             if (!eventStorage) {
                 eventStorage = this.__local[eventName] = [];
@@ -150,7 +150,6 @@ export function applyConfigurableMixin(base: any): any {
 
             const existsIndex = eventStorage.findIndex(({ key }) => eventOptions.key == key);
             if (existsIndex === -1) {
-                // @ts-ignore
                 eventStorage.push(eventOptions);
             } else {
                 eventStorage[existsIndex] = eventOptions;

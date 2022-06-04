@@ -23,7 +23,7 @@ function getInitialVariables(request: Puppeteer.HTTPRequest): initialVariables {
     const domain = getDomain(url);
 
     // WARNING: we are using private property of Puppeteer.HTTPRequest here
-    // @ts-ignore
+    // @ts-ignore: _client is private but we want to get this variable
     const client = request._client;
 
     return { url, domain, client };

@@ -41,30 +41,30 @@ Even with cooperative mode you can not make your decisions asynchronously. Here 
 ### Table of Contents
 
 -   [wrapPage(page, config?)](#wrappagepage-config)
--   [cooperativePriority](#cooperativepriority)
--   [requestMode](#requestmode)
--   [continue()](#continue)
+-   [.cooperativePriority](#cooperativepriority)
+-   [.requestMode](#requestmode)
+-   [.continue()](#continue)
 -   [NPM_PACKAGE_NAME()](#npm_package_name)
--   [flushLocal(key?)](#flushlocalkey)
--   [recordError(message, error?, meta)](#recorderrormessage-error-meta)
--   [recordInternalError(message, meta)](#recordinternalerrormessage-meta)
--   [recordWarn(message, meta)](#recordwarnmessage-meta)
--   [ignore](#ignore)
--   [native](#native)
--   [managed](#managed)
--   [gotRequest](#gotrequest)
--   [gotRequest](#gotrequest-1)
--   [sentRequest](#sentrequest)
--   [gotResponse](#gotresponse)
--   [sentResponse](#sentresponse)
--   [closed](#closed)
--   [method](#method)
--   [url](#url)
--   [headers](#headers)
--   [body](#body)
+-   [.flushLocal(key?)](#flushlocalkey)
+-   [.recordError(message, error?, meta)](#recorderrormessage-error-meta)
+-   [.recordInternalError(message, meta)](#recordinternalerrormessage-meta)
+-   [.recordWarn(message, meta)](#recordwarnmessage-meta)
+-   [.ignore](#ignore)
+-   [.native](#native)
+-   [.managed](#managed)
+-   [.gotRequest](#gotrequest)
+-   [.gotRequest](#gotrequest-1)
+-   [.sentRequest](#sentrequest)
+-   [.gotResponse](#gotresponse)
+-   [.sentResponse](#sentresponse)
+-   [.closed](#closed)
+-   [.method](#method)
+-   [.url](#url)
+-   [.headers](#headers)
+-   [.body](#body)
 -   [IAbortReason()](#iabortreason)
 
-## wrapPage(page, config?)
+## [wrapPage(page, config?)](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/index.ts#L19-L21)
 
 -   `page` **Puppeteer.Page** Page for future interceptions
 -   `config` **IConfig?**
@@ -75,7 +75,7 @@ Add interception ability to the page [(sample)](https://github.com/utyfua/automa
 
 ---
 
-## cooperativePriority
+## .[cooperativePriority](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/base.ts#L46-L46)
 
 Type: **([undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined) \| [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number))**
 
@@ -85,11 +85,11 @@ This package using own way to manage cooperation
 
 Use only if you know what it does
 
-[\[Rear more\]](https://github.com/puppeteer/puppeteer/blob/v10.2.0/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
+[\[Read more\]](https://github.com/puppeteer/puppeteer/blob/v10.2.0/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
 
 ---
 
-## requestMode
+## .[requestMode](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/base.ts#L54-L54)
 
 Type: **RequestMode**
 
@@ -101,7 +101,7 @@ Type: **RequestMode**
 
 ---
 
-## continue()
+## .[continue()](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/classes.ts#L42-L42)
 
 Returns: **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;void>**
 
@@ -111,13 +111,13 @@ If response not collected yet will call getResponse first.
 
 ---
 
-## NPM_PACKAGE_NAME()
+## [NPM_PACKAGE_NAME()](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/constants.ts#L14-L14)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
 ---
 
-## flushLocal(key?)
+## .[flushLocal(key?)](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/mixins.ts#L37-L37)
 
 -   `key` **any?** If provided will flush only specific parameter at local level
 
@@ -127,7 +127,7 @@ Flush local configuration
 
 ---
 
-## recordError(message, error?, meta)
+## .[recordError(message, error?, meta)](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/mixins.ts#L47-L51)
 
 -   `message` **any** Flow description
 -   `error` **any?** Original error object
@@ -139,7 +139,7 @@ Pass an error to the logger
 
 ---
 
-## recordInternalError(message, meta)
+## .[recordInternalError(message, meta)](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/mixins.ts#L57-L60)
 
 -   `message` **any** Flow/error description
 -   `meta` **...any** non specific meta information
@@ -150,7 +150,7 @@ Pass an internal error to the logger
 
 ---
 
-## recordWarn(message, meta)
+## .[recordWarn(message, meta)](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/mixins.ts#L66-L69)
 
 -   `message` **any** Flow/error description
 -   `meta` **...any** non specific meta information
@@ -161,7 +161,7 @@ Pass an warn to the logger
 
 ---
 
-## ignore
+## .[ignore](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L9-L9)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -169,7 +169,7 @@ Plugin will do nothing about original request
 
 ---
 
-## native
+## .[native](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L14-L14)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -178,7 +178,7 @@ But some plugin functionality can be unavailable.
 
 ---
 
-## managed
+## .[managed](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L18-L18)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -186,7 +186,7 @@ Plugin will do all requests by himself. All plugin features will be available.
 
 ---
 
-## gotRequest
+## .[gotRequest](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L32-L32)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -194,7 +194,7 @@ We just got a new request from the puppeteer and getting additional information 
 
 ---
 
-## gotRequest
+## .[gotRequest](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L32-L32)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -204,7 +204,7 @@ At this stage we can adjust request.
 
 ---
 
-## sentRequest
+## .[sentRequest](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L39-L39)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -214,7 +214,7 @@ At this stage we unable to adjust request but still have not response to go forw
 
 ---
 
-## gotResponse
+## .[gotResponse](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L47-L47)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -225,7 +225,7 @@ At this stage the user will unable to override the request anymore.
 
 ---
 
-## sentResponse
+## .[sentResponse](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L54-L54)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -235,7 +235,7 @@ Its too late to adjust request or response.
 
 ---
 
-## closed
+## .[closed](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L61-L61)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -245,7 +245,7 @@ From technical perspective `sentResponse` looks just the same
 
 ---
 
-## method
+## .[method](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L70-L70)
 
 Type: **Method**
 
@@ -255,7 +255,7 @@ If request were executed you will unable to change this property.
 
 ---
 
-## url
+## .[url](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L77-L77)
 
 Type: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
@@ -265,7 +265,7 @@ If request were executed you will unable to change this property.
 
 ---
 
-## headers
+## .[headers](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L84-L84)
 
 Type: **[Headers](https://developer.mozilla.org/docs/Web/HTML/Element/header)**
 
@@ -275,7 +275,7 @@ If request were executed you will unable to change this property.
 
 ---
 
-## body
+## .[body](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L91-L91)
 
 Type: **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Buffer](https://nodejs.org/api/buffer.html) \| [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))**
 
@@ -285,7 +285,7 @@ If request were executed you will unable to change this property.
 
 ---
 
-## IAbortReason()
+## [IAbortReason()](https://github.com/utyfua/automation-extra-interception-proxy/blob/25c83247ef79c285f05712cb56221e3adf4b8264/src/interfaces/network.ts#L103-L120)
 
 Type: **ErrorCode**
 

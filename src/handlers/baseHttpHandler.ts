@@ -1,5 +1,5 @@
 import { IInterceptionProxyRequest, IResponseOptions } from '../interfaces';
-import got from 'got';
+import got, { OptionsOfBufferResponseBody } from 'got';
 import ProxyAgent from 'proxy-agent';
 
 export function getGotProxyAgent(proxy: any): any {
@@ -19,7 +19,7 @@ export async function baseHttpHandler(request: IInterceptionProxyRequest): Promi
     } = request;
     if (!url.startsWith('http:') && !url.startsWith('https:')) return;
 
-    const gotOptions = {
+    const gotOptions: OptionsOfBufferResponseBody = {
         // main request options
         method, url, headers, body, cookieJar,
 
@@ -28,12 +28,14 @@ export async function baseHttpHandler(request: IInterceptionProxyRequest): Promi
         agent: getGotProxyAgent(proxy),
 
         // another `got` options
-        responseType: "buffer" as "buffer",
+        responseType: 'buffer',
         throwHttpErrors: false,
         ignoreInvalidCookies: true,
         followRedirect: false,
     }
+
     const gotResponse = await got(gotOptions);
+
     return {
         status: gotResponse.statusCode,
         headers: gotResponse.headers,

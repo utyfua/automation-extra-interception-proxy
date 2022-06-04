@@ -182,7 +182,7 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         } catch (error) {
             this.stage = RequestStage.closed;
 
-            // @ts-ignore
+            // @ts-ignore: _client is private but we want to get this variable
             const client = this.originalRequest._client;
             if (client && !client._connection) {
                 // possibly page was closed, no need to scream

@@ -41,7 +41,7 @@ export interface IConfig {
      *
      * Use only if you know what it does
      *
-     * [[Rear more]](https://github.com/puppeteer/puppeteer/blob/v10.2.0/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
+     * [[Read more]](https://github.com/puppeteer/puppeteer/blob/v10.2.0/docs/api.md#cooperative-intercept-mode-and-legacy-intercept-mode)
      */
     cooperativePriority: undefined | number;
     /**
