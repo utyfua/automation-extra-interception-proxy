@@ -7,10 +7,10 @@ export const defaultLogger: typeof Logger =
         switch (level) {
             case 'error':
                 if (error) console.error(error);
-                console.log(new Error(message), ...meta);
+                console.log(message, ...meta);
                 break;
             case 'warning':
-                console.warn(new Error(message), ...meta);
+                console.warn('Warning: ' + message, ...meta);
                 break;
             case 'info':
                 console.log(message, ...meta);
