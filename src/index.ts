@@ -4,8 +4,11 @@ import { IConfig } from './interfaces';
 
 import { Plugin } from './classes/Plugin';
 import { InterceptionProxyPageConfig } from './classes/Page';
+import type { InterceptionProxyRequest } from './classes/Request'
 
 export {
+    IConfig,
+    InterceptionProxyRequest,
     Plugin as InterceptionProxyPlugin,
     Plugin as default,
     Plugin as AutomationExtraInterceptionProxyPlugin,

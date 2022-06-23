@@ -34,6 +34,9 @@ export interface IRequestEventOptionsMap {
     requestListeners: IRequestListenerOptions,
 }
 
+/**
+ * Plugin configuration object
+ */
 export interface IConfig {
     /**
      * Puppeteer' "Cooperative Intercept Mode" `priority`
@@ -51,13 +54,40 @@ export interface IConfig {
      * `native` - Plugin will just listen to the original request/response data and all requests will fulfilled by puppeteer itself. But some plugin functionality can be unavailable.
      *
      * `managed` - Plugin will do all requests by `requestHandlers` or by himself. All plugin features will be available.
+     * 
+     * Default - managed
      */
     requestMode: RequestMode;
-    proxy: any, // TODO: fill missing type
+    /**
+     * Proxy for request
+     * 
+     * Automatically sets `agent` property using [proxy-agent](https://www.npmjs.com/package/proxy-agent)
+     * 
+     * Default `null`
+     */
+    proxy: string | null, // TODO: fill missing type
+    /**
+     * Your agent hot handling requests
+     * 
+     * Cleans proxy if sets directly
+     * 
+     * Default `null`
+     */
     agent: Agent | null,
+    /**
+     * You can handle all plugins messages
+     */
     logger: typeof Logger;
+    /**
+     * Request timeout in milliseconds(actual execution only)
+     */
     timeout: number;
     // attempts: number;
+    /**
+     * If you didn't changed request or response, let puppeteer handle this request by himself
+     * 
+     * Default: `false`
+     */
     nativeContinueIfPossible: boolean;
     requestHandlers: IRequestHandlerOptions[];
     requestListeners: IRequestListenerOptions[];

@@ -8,8 +8,7 @@
 
 // require libs
 const puppeteer = require('puppeteer');
-// const InterceptionUtils = require('automation-extra-interception-proxy');
-const InterceptionUtils = require('../');
+const InterceptionUtils = require('automation-extra-interception-proxy');
 
 // do everything async
 (async () => {
@@ -23,7 +22,13 @@ const InterceptionUtils = require('../');
     const page = await browser.newPage();
 
     // attach interception commands
-    await InterceptionUtils.wrapPage(page);
+    await InterceptionUtils.wrapPage(page, {
+        requestMode: "managed",
+        nativeContinueIfPossible: false,
+
+        // optional, will be handled by https://www.npmjs.com/package/proxy-agent
+        // proxy: "socks5://username:password@some-socks-proxy.com:9050" 
+    });
 
     // create promise callback for async processing
     let callback;

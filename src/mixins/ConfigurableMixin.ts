@@ -24,7 +24,7 @@ const DefaultConfig: IConfig = {
     agent: null,
     timeout: 30000,
     // attempts: 1,
-    nativeContinueIfPossible: true,
+    nativeContinueIfPossible: false,
     requestHandlers: [
         {
             key: baseHttpHandlerKey,
@@ -98,6 +98,9 @@ export function applyConfigurableMixin(base: any): any {
         return options;
     }
 
+    /**
+     * Plugin general configuration.
+     */
     class ConfigurableMixin extends ConfigurableMixinBase implements IConfigurableMixin {
         protected __local: Partial<IConfig> = {};
         protected __parent?: Partial<IConfig>;
@@ -105,10 +108,10 @@ export function applyConfigurableMixin(base: any): any {
         protected __configGetter<T extends keyof IConfig>(key: T): IConfig[T] {
             // merge listener list by parent of default configuration
             if (['requestHandlers', 'requestListeners'].includes(key)) {
-                const listeners: IRequestEventOptionsMap[keyof IRequestEventOptionsMap][] =
-                    [...(this.__parent && this.__parent[key] || DefaultConfig[key])] as IConfig[T];
+                const listeners = [...(this.__parent && this.__parent[key] || DefaultConfig[key]) as
+                    IRequestEventOptionsMap[keyof IRequestEventOptionsMap][]]
 
-                const localListeners: IRequestEventOptionsMap[keyof IRequestEventOptionsMap][] = this.__local[key];
+                const localListeners = this.__local[key] as IRequestEventOptionsMap[keyof IRequestEventOptionsMap][];
 
                 if (localListeners) {
                     localListeners.forEach(eventOptions => {
@@ -134,7 +137,7 @@ export function applyConfigurableMixin(base: any): any {
 
         protected __configSetter<T extends keyof IConfig>(key: T, value: IConfig[T]): void {
             if (key === 'proxy') {
-                const agent = value ? new ProxyAgent(value) : null
+                const agent = value ? new ProxyAgent(value as string) : null
                 this.__local.agent = agent;
             }
             if (key === 'agent') {

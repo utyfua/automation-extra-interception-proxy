@@ -32,6 +32,9 @@ for (let key of ['method', 'url', 'headers', 'body', 'cookieJar']) {
     });
 }
 
+/**
+ * Plugin' request. The request have significant difference with Puppeteer' request.
+ */
 class InterceptionProxyRequest extends RequestBase implements IInterceptionProxyRequest {
     emit2(eventName: string, payload: any) {
         this.emit(eventName, payload);
@@ -203,10 +206,8 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         return response;
     };
 
-    /**
-     * If its managed response we can modify data until it will be not sent to puppeteer,
-     * but in another case it will be finale version of response
-     */
+    // If its managed response we can modify data until it will be not sent to puppeteer,
+    // but in another case it will be finale version of response
     protected _setResponseInstance(response: IInterceptionProxyResponse, mode: RequestMode = RequestMode.managed) {
         this.__response = response;
         this.stage = mode === RequestMode.managed ? RequestStage.gotResponse : RequestStage.sentResponse;

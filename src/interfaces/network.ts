@@ -2,6 +2,9 @@ import type { Method, Headers } from 'got'
 import type { ErrorCode } from 'puppeteer'
 import type { CookieJar } from 'tough-cookie';
 
+/**
+ * Plugin more for handling requests
+ */
 export enum RequestMode {
     /**
      * Plugin will do nothing about original request
@@ -18,10 +21,11 @@ export enum RequestMode {
     managed = 'managed',
 }
 
+/**
+ * Current stage of the request
+ */
 export enum RequestStage {
-    /**
-     * We just got a new request from the puppeteer and getting additional information about it.
-     */
+    // * We just got a new request from the puppeteer and getting additional information about it.
     // initial = 'initial',
 
     /**
@@ -61,6 +65,11 @@ export enum RequestStage {
     closed = 'closed',
 }
 
+/**
+ * Plugin' request options. The request have significant difference with Puppeteer' request.
+ * 
+ * Can be modified. All changes will be applied to the actual Puppeteer' request and will be executed
+ */
 export interface IRequestOptions {
     /**
      * Request method.
