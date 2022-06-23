@@ -1,3 +1,5 @@
+import ProxyAgent from 'proxy-agent';
+
 import {
     IConfig,
     IConfigurableMixin,
@@ -19,6 +21,7 @@ const DefaultConfig: IConfig = {
     requestMode: RequestMode.managed,
     logger: defaultLogger,
     proxy: null,
+    agent: null,
     timeout: 30000,
     // attempts: 1,
     nativeContinueIfPossible: true,
@@ -130,6 +133,14 @@ export function applyConfigurableMixin(base: any): any {
         }
 
         protected __configSetter<T extends keyof IConfig>(key: T, value: IConfig[T]): void {
+            if (key === 'proxy') {
+                const agent = value ? new ProxyAgent(value) : null
+                this.__local.agent = agent;
+            }
+            if (key === 'agent') {
+                this.__local.proxy = null;
+            }
+
             this.__local[key] = value;
             // this.emit(key, value)
         }

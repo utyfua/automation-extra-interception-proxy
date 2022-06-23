@@ -1,13 +1,14 @@
-import { IInterceptionProxyRequest, IResponseOptions } from '../interfaces';
 import got, { OptionsOfBufferResponseBody } from 'got';
-import ProxyAgent from 'proxy-agent';
+import type { Agent } from 'http'
 
-export function getGotProxyAgent(proxy: any): any {
-    if (proxy === null) { return }
-    const proxyAgent = new ProxyAgent(proxy);
+import { IInterceptionProxyRequest, IResponseOptions } from '../interfaces';
+
+export function getGotAgent(agent: Agent | null): any {
+    if (agent === null) { return }
+
     return {
-        http: proxyAgent,
-        https: proxyAgent,
+        http: agent,
+        https: agent,
     }
 }
 
@@ -16,7 +17,7 @@ export async function baseHttpHandler(request: IInterceptionProxyRequest): Promi
     try {
         const {
             method, url, headers, body, cookieJar,
-            timeout, proxy
+            timeout, agent
         } = request;
         if (!url.startsWith('http:') && !url.startsWith('https:')) return;
 
@@ -26,7 +27,7 @@ export async function baseHttpHandler(request: IInterceptionProxyRequest): Promi
 
             // secondary request options
             timeout,
-            agent: getGotProxyAgent(proxy),
+            agent: getGotAgent(agent),
 
             // another `got` options
             responseType: 'buffer',

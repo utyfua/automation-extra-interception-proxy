@@ -1,4 +1,5 @@
 import type Puppeteer from 'puppeteer' // ContinueRequestOverrides
+import type { Agent } from 'http'
 import { IInterceptionProxyRequest } from './classes';
 import { IResponseOptions, RequestMode } from './network'
 
@@ -52,7 +53,8 @@ export interface IConfig {
      * `managed` - Plugin will do all requests by `requestHandlers` or by himself. All plugin features will be available.
      */
     requestMode: RequestMode;
-    proxy: any; // TODO: fill missing type
+    proxy: any, // TODO: fill missing type
+    agent: Agent | null,
     logger: typeof Logger;
     timeout: number;
     // attempts: number;
