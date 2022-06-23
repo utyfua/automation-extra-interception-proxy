@@ -10,6 +10,7 @@ import {
 import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
 import { setCookieByHeaders } from '../utils/cookies'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
+import { getCDPSession } from '../utils/getCDPSession';
 
 @applyNetworkMixin
 @applyLoggableMixin
@@ -161,7 +162,7 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
             if ("body" in response) {
                 const cookieHeader = response.headers["set-cookie"];
                 if (cookieHeader) {
-                    await setCookieByHeaders(this.originalRequest, cookieHeader);
+                    await setCookieByHeaders(this.page, this.originalRequest, cookieHeader);
                     response.headers["set-cookie"] = undefined;
                 }
                 await this.originalRequest.respond(
@@ -182,9 +183,8 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         } catch (error) {
             this.stage = RequestStage.closed;
 
-            // @ts-ignore: _client is private but we want to get this variable
-            const client = this.originalRequest._client;
-            if (client && !client._connection) {
+            const client = getCDPSession(this.page, this.originalRequest);
+            if (client && !client.connection()) {
                 // possibly page was closed, no need to scream
             } else {
                 this.emit2('error', error);

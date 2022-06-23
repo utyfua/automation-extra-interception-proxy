@@ -8,6 +8,7 @@ import { AUTHOR_NEW_ISSUE_URL, NPM_PACKAGE_NAME } from '../../interfaces/constan
 import { handyCDP } from './handyCDP'
 import { getDomain } from '../urls'
 import { formatCookie, parseCookieHeader } from './serializing'
+import { getCDPSession } from '../getCDPSession';
 
 interface initialVariables {
     url: string;
@@ -15,23 +16,21 @@ interface initialVariables {
     client: Puppeteer.CDPSession,
 }
 
-function getInitialVariables(request: Puppeteer.HTTPRequest): initialVariables {
+function getInitialVariables(page: Puppeteer.Page, request: Puppeteer.HTTPRequest): initialVariables {
     const frame = request.frame();
 
     const url = request.isNavigationRequest() || !frame || !frame.url() ? request.url() : frame.url();
 
     const domain = getDomain(url);
 
-    // WARNING: we are using private property of Puppeteer.HTTPRequest here
-    // @ts-ignore: _client is private but we want to get this variable
-    const client = request._client;
+    const client = getCDPSession(page, request);
 
     return { url, domain, client };
 }
 
 
-export async function getCookieJarByRequest(request: Puppeteer.HTTPRequest): Promise<CookieJar> {
-    const { url, client } = getInitialVariables(request);
+export async function getCookieJarByRequest(page: Puppeteer.Page, request: Puppeteer.HTTPRequest): Promise<CookieJar> {
+    const { url, client } = getInitialVariables(page, request);
     const browserCookies = await handyCDP.getCookies(client, {
         urls: [url],
         // urls: [url, domain], // saw this code as solution for an issue
@@ -49,8 +48,8 @@ export async function getCookieJarByRequest(request: Puppeteer.HTTPRequest): Pro
     return cookieJar;
 }
 
-export async function setCookieByHeaders(request: Puppeteer.HTTPRequest, rawCookies: string | string[]): Promise<void> {
-    const { url, client, domain } = getInitialVariables(request);
+export async function setCookieByHeaders(page: Puppeteer.Page, request: Puppeteer.HTTPRequest, rawCookies: string | string[]): Promise<void> {
+    const { url, client, domain } = getInitialVariables(page, request);
 
     if (typeof rawCookies === 'string') rawCookies = [rawCookies];
     const browserCookies = rawCookies.map(header => parseCookieHeader(header, domain));

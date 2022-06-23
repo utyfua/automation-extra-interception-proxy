@@ -11,6 +11,7 @@ import { InterceptionProxyResponse } from './Response';
 import { getCookieJarByRequest } from '../utils/cookies'
 import { adjustRequestCorsHeaders } from '../utils/cors'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
+import { getCDPSession } from '../utils/getCDPSession';
 
 @applyConfigurableMixin
 @applyLoggableMixin
@@ -77,13 +78,12 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         adjustRequestCorsHeaders(initial, requestOptions);
 
         const isRequestClientClosed = (): boolean => {
-            // @ts-ignore: _client is private but we want to get this variable
-            const client: Puppeteer.CDPSession = originalRequest._client;
+            const client = getCDPSession(page, originalRequest);
             return !client.connection()
         }
 
         try {
-            requestOptions.cookieJar = await getCookieJarByRequest(originalRequest);
+            requestOptions.cookieJar = await getCookieJarByRequest(page, originalRequest);
         } catch (error) {
             if (isRequestClientClosed()) return;
 
