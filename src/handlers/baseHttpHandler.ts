@@ -13,33 +13,41 @@ export function getGotProxyAgent(proxy: any): any {
 
 export const baseHttpHandlerKey = 'baseHttpHandlerKey';
 export async function baseHttpHandler(request: IInterceptionProxyRequest): Promise<void | IResponseOptions> {
-    const {
-        method, url, headers, body, cookieJar,
-        timeout, proxy
-    } = request;
-    if (!url.startsWith('http:') && !url.startsWith('https:')) return;
+    try {
+        const {
+            method, url, headers, body, cookieJar,
+            timeout, proxy
+        } = request;
+        if (!url.startsWith('http:') && !url.startsWith('https:')) return;
 
-    const gotOptions: OptionsOfBufferResponseBody = {
-        // main request options
-        method, url, headers, body, cookieJar,
+        const gotOptions: OptionsOfBufferResponseBody = {
+            // main request options
+            method, url, headers, body, cookieJar,
 
-        // secondary request options
-        timeout,
-        agent: getGotProxyAgent(proxy),
+            // secondary request options
+            timeout,
+            agent: getGotProxyAgent(proxy),
 
-        // another `got` options
-        responseType: 'buffer',
-        throwHttpErrors: false,
-        ignoreInvalidCookies: true,
-        followRedirect: false,
-    }
+            // another `got` options
+            responseType: 'buffer',
+            throwHttpErrors: false,
+            ignoreInvalidCookies: true,
+            followRedirect: false,
+        }
 
-    const gotResponse = await got(gotOptions);
+        const gotResponse = await got(gotOptions);
 
-    return {
-        status: gotResponse.statusCode,
-        headers: gotResponse.headers,
-        // contentType: gotResponse.headers['content-type'],
-        body: gotResponse.body,
+        return {
+            status: gotResponse.statusCode,
+            headers: gotResponse.headers,
+            // contentType: gotResponse.headers['content-type'],
+            body: gotResponse.body,
+        }
+    } catch (error) {
+        request.recordWarn('Unable to get response for', [request.url, error])
+        // TODO: throw correct `abortReason`
+        return {
+            abortReason: 'connectionreset'
+        }
     }
 }
