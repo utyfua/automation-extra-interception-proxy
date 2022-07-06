@@ -63,7 +63,7 @@ export interface ILoggableMixin {
      * @param message Flow/error description
      * @param meta non specific meta information
      */
-    recordWarn(
+    recordWarning(
         message: ILogObject["message"],
         ...meta: ILogObject["meta"]
     ): void

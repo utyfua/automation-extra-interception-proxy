@@ -33,12 +33,12 @@ export function applyLoggableMixin(base: any): any {
             this.recordError(message, error, ...meta)
         }
 
-        recordWarn(
+        recordWarning(
             message: ILogObject["message"],
             ...meta: ILogObject["meta"]
         ) {
             this.logger({
-                level: 'warn',
+                level: 'warning',
                 message,
                 meta,
             })

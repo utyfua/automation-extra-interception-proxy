@@ -1,5 +1,6 @@
 import type Puppeteer from 'puppeteer' // ContinueRequestOverrides
 import type { Agent } from 'http'
+import type { Hooks } from 'got'
 import { IInterceptionProxyRequest } from './classes';
 import { IResponseOptions, RequestMode } from './network'
 
@@ -89,6 +90,14 @@ export interface IConfig {
      * Default: `false`
      */
     nativeContinueIfPossible: boolean;
+    /**
+     * It is not recommended to use. Use another library properties to do it.
+     * 
+     * Modify requests in more advanced way through interaction with got.
+     * 
+     * @see https://github.com/sindresorhus/got/blob/main/documentation/9-hooks.md
+     */
+    gotHooks: Hooks,
     requestHandlers: IRequestHandlerOptions[];
     requestListeners: IRequestListenerOptions[];
 }

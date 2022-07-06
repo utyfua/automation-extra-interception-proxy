@@ -158,7 +158,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
             throw new Error(getStageEnhancedErrorMessage(key, this.stage))
         }
         if (this.requestMode !== RequestMode.managed) {
-            this.recordWarn(
+            this.recordWarning(
                 `Possibly the request will not be upgraded by your "${key}" ` +
                 `because current mode ${this.requestMode} does not support this ability. ` +
                 `Please set "requestMode" variable to "${RequestMode.managed}" and then try again.`);

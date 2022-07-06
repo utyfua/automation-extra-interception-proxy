@@ -48,6 +48,6 @@ module.exports = function (req, res) {
         delete memoryDB.corsOptionsReq[id];
     }
 
-    res.status(req.query.httpCode || 200);
+    res.status(parseInt(req.query.httpCode) || 200);
     res.send(reqFiltered)
 }

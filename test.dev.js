@@ -15,7 +15,10 @@ const InterceptionUtils = require('./');
     const [page] = await browser.pages();
 
     // attach interception commands
-    const interceptions = await InterceptionUtils.wrapPage(page, { requestMode: 'managed' });
+    const interceptions = await InterceptionUtils.wrapPage(page, {
+        requestMode: 'managed',
+        // requestMode: 'native',
+    });
     console.log({ interceptions })
 
     try {

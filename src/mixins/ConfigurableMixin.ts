@@ -25,6 +25,7 @@ const DefaultConfig: IConfig = {
     timeout: 30000,
     // attempts: 1,
     nativeContinueIfPossible: false,
+    gotHooks: {},
     requestHandlers: [
         {
             key: baseHttpHandlerKey,
