@@ -64,15 +64,26 @@ export interface IConfig {
      * 
      * Automatically sets `agent` property using [proxy-agent](https://www.npmjs.com/package/proxy-agent)
      * 
+     * Examples:
+     * - `http://proxy-server-over-tcp.com:3128`
+     * - `https://proxy-server-over-tls.com:3129`
+     * - `socks://username:password@some-socks-proxy.com:9050` (username & password are optional)
+     * - `socks5://username:password@some-socks-proxy.com:9050` (username & password are optional)
+     * - `socks4://some-socks-proxy.com:9050`
+     * - `pac+http://www.example.com/proxy.pac`
+     * 
      * Default `null`
      */
     proxy: string | null, // TODO: fill missing type
     /**
      * Your agent hot handling requests
      * 
-     * Cleans proxy if sets directly
+     * Sets by `proxy` property. Cleans `proxy` property if sets directly.
      * 
      * Default `null`
+     * 
+     * @deprecated Use `proxy` property instead. 
+     * Deprecated because of possibly incoming request handling rework.
      */
     agent: Agent | null,
     /**
