@@ -6,14 +6,14 @@ export const baseHttpHandlerKey = 'baseHttpHandlerKey';
 export async function baseHttpHandler(request: IInterceptionProxyRequest): Promise<void | IResponseOptions> {
     try {
         const {
-            method, url, headers, body, cookieJar,
+            method, url, headers, body,
             timeout, agent, gotHooks
         } = request;
         if (!url.startsWith('http:') && !url.startsWith('https:')) return;
 
         const gotOptions: OptionsOfBufferResponseBody = {
             // main request options
-            method, url, headers, body, cookieJar, hooks: gotHooks,
+            method, url, headers, body, hooks: gotHooks,
 
             // secondary request options
             timeout,

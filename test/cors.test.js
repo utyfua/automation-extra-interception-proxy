@@ -8,7 +8,7 @@ function getValuesPath(filePath) {
 }
 
 async function doCorsTest(testName, page) {
-    await page.goto('http://localhost:3000/cors.html#' + testName, { timeout: 3000 })
+    await page.goto('http://localhost:3000/cors.html#' + testName, { timeout: 5000 })
     await page.waitForSelector('#content');
 
     let valuesName = 'everything';

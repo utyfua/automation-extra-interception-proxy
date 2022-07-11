@@ -102,6 +102,14 @@ export interface IConfig {
      */
     nativeContinueIfPossible: boolean;
     /**
+     * For old versions of puppeteer, plugin should handle cookies by himself.
+     * 
+     * Enable this option, if you are have an issue with cookie.
+     * 
+     * Recommended to upgrade your puppeteer version instead.
+     */
+    enableLegacyCookieHandling: boolean;
+    /**
      * It is not recommended to use. Use another library properties to do it.
      * 
      * Modify requests in more advanced way through interaction with got.

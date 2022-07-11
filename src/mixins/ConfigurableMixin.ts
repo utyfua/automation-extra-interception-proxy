@@ -25,6 +25,7 @@ const DefaultConfig: IConfig = {
     timeout: 30000,
     // attempts: 1,
     nativeContinueIfPossible: false,
+    enableLegacyCookieHandling: false,
     gotHooks: {},
     requestHandlers: [
         {

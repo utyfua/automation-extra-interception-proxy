@@ -1,6 +1,5 @@
 import type { Method, Headers } from 'got'
 import type { ErrorCode } from 'puppeteer'
-import type { CookieJar } from 'tough-cookie';
 
 /**
  * Plugin mode for handling requests
@@ -89,8 +88,6 @@ export interface IRequestOptions {
      * Request headers.
      *
      * If request were executed you will unable to change this property.
-     * 
-     * Cookies will handled by `cookieJar` property.
      */
     headers: Headers;
 
@@ -100,13 +97,6 @@ export interface IRequestOptions {
      * If request were executed you will unable to change this property.
      */
     body: string | Buffer | undefined;
-
-    /**
-     * tough-cookie cookie storage.
-     * 
-     * @see [tough-cookie](https://github.com/salesforce/tough-cookie#readme)
-     */
-    cookieJar?: CookieJar,
 }
 
 export interface IResponseOverrides {

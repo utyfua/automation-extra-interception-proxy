@@ -1,5 +1,7 @@
 import type Puppeteer from 'puppeteer'
 import EventEmitter from 'events';
+import { PuppeteerToughCookieStore } from 'puppeteer-tough-cookie-store';
+import { Cookie, CookieJar } from 'tough-cookie';
 import {
     AUTHOR_NEW_ISSUE_URL, NPM_PACKAGE_NAME,
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
@@ -8,7 +10,6 @@ import {
     IResponseOverrides, IAbortOverrides, IResponseOptions, IAbortReason, RequestMode
 } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
-import { setCookieByHeaders } from '../utils/cookies'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
 import { getCDPSession } from '../utils/getCDPSession';
 
@@ -160,10 +161,17 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         const response = this.responseOptions;
         try {
             if ("body" in response) {
-                const cookieHeader = response.headers["set-cookie"];
-                if (cookieHeader) {
-                    await setCookieByHeaders(this.page, this.originalRequest, cookieHeader);
+                const cookieHeaderRaw = response.headers["set-cookie"]
+                const cookieHeader = typeof cookieHeaderRaw === 'string' ? [cookieHeaderRaw] : cookieHeaderRaw;
+                if (this.enableLegacyCookieHandling && cookieHeader) {
                     response.headers["set-cookie"] = undefined;
+                    
+                    const cookieJar = new CookieJar(new PuppeteerToughCookieStore(getCDPSession(this.page, this.originalRequest)));
+                    await Promise.all(cookieHeader.map(cookieString => {
+                        const cookie = Cookie.parse(cookieString);
+                        if (!cookie) return;
+                        return cookieJar.setCookie(cookie, this.getRequest().url)
+                    }))
                 }
                 await this.originalRequest.respond(
                     response,

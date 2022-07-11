@@ -9,6 +9,10 @@ const InterceptionUtils = require('./');
     const browser = await puppeteer.launch({
         headless: false,
         devtools: true,
+        args: [
+            '--incognito',
+            '--start-in-incognito',
+        ],
     });
 
     // get some page
@@ -18,6 +22,7 @@ const InterceptionUtils = require('./');
     const interceptions = await InterceptionUtils.wrapPage(page, {
         requestMode: 'managed',
         // requestMode: 'native',
+        // enableLegacyCookieHandling: true,
     });
     console.log({ interceptions })
 

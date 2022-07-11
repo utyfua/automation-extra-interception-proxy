@@ -1,5 +1,7 @@
 import type Puppeteer from 'puppeteer'
 import EventEmitter from 'events';
+import { PuppeteerToughCookieStore } from 'puppeteer-tough-cookie-store';
+import { CookieJar } from 'tough-cookie';
 import {
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
     IInterceptionProxyRequest, INewRequestInitialArgs, IRequestOptions,
@@ -8,7 +10,6 @@ import {
 } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
 import { InterceptionProxyResponse } from './Response';
-import { getCookieJarByRequest } from '../utils/cookies'
 import { adjustRequestCorsHeaders } from '../utils/cors'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
 import { getCDPSession } from '../utils/getCDPSession';
@@ -19,7 +20,7 @@ import { getCDPSession } from '../utils/getCDPSession';
 class RequestBase extends EventEmitter { }
 
 interface RequestBase extends IConfigurableMixin, ILoggableMixin, INetworkMixin, IRequestOptions { }
-for (let key of ['method', 'url', 'headers', 'body', 'cookieJar']) {
+for (let key of ['method', 'url', 'headers', 'body']) {
     Object.defineProperty(RequestBase.prototype, key, {
         get: function () {
             return this.requestOptions[key];
@@ -86,7 +87,10 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         }
 
         try {
-            requestOptions.cookieJar = await getCookieJarByRequest(page, originalRequest);
+            if (__parent.enableLegacyCookieHandling) {
+                const cookieJar = new CookieJar(new PuppeteerToughCookieStore(getCDPSession(__parent.page, originalRequest)));
+                requestOptions.headers['Cookie'] = await cookieJar.getCookieString(requestOptions.url);
+            }
         } catch (error) {
             if (isRequestClientClosed()) return;
 
