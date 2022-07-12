@@ -24,7 +24,6 @@ const InterceptionUtils = require('automation-extra-interception-proxy');
     // attach interception commands
     await InterceptionUtils.wrapPage(page, {
         requestMode: "managed",
-        nativeContinueIfPossible: false,
 
         // optional, will be handled by https://www.npmjs.com/package/proxy-agent
         // proxy: "socks5://username:password@some-socks-proxy.com:9050" 
