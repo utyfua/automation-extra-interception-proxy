@@ -138,6 +138,12 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
 
 
         try {
+            if (
+                request.isResponseOverrideAvailable &&
+                !('ignoreResponseBodyIfPossible' in request.getLocalConfiguration())
+            ) {
+                request.ignoreResponseBodyIfPossible = request.ignoreResponseBodyIfPossible;
+            }
             await request.continue();
         } catch (error) {
             if (isRequestClientClosed()) return;

@@ -35,6 +35,8 @@ export interface IConfigurableMixin extends IConfig {
      * @param key If provided will flush only specific parameter at local level
      */
     flushLocal(key?: keyof IConfig): void
+    getLocalConfiguration(): Partial<IConfig>,
+    getParentConfiguration(): Partial<IConfig>,
 }
 
 export interface ILoggableMixin {

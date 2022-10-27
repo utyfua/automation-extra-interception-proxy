@@ -100,7 +100,8 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         };
 
         try {
-            responseOptions.body = await originalResponse.buffer()
+            if (request.getLocalConfiguration().ignoreResponseBodyIfPossible)
+                responseOptions.body = await originalResponse.buffer()
         } catch (e) {
             // console.dir(e);
             // Could not load body for this request. This might happen if the request is a pre a preflight request.
@@ -165,7 +166,7 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
                 const cookieHeader = typeof cookieHeaderRaw === 'string' ? [cookieHeaderRaw] : cookieHeaderRaw;
                 if (this.enableLegacyCookieHandling && cookieHeader) {
                     response.headers["set-cookie"] = undefined;
-                    
+
                     const cookieJar = new CookieJar(new PuppeteerToughCookieStore(getCDPSession(this.page, this.originalRequest)));
                     await Promise.all(cookieHeader.map(cookieString => {
                         const cookie = Cookie.parse(cookieString);

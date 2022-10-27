@@ -102,6 +102,16 @@ export interface IConfig {
      */
     nativeContinueIfPossible: boolean;
     /**
+     * If you did not use the plugin' response object it will not retrieve response from puppeteer 
+     * for better performance
+     * 
+     * Applies for `native` mode only
+     * 
+     * @dev Affects the operation of the `getResponse` only if it is set to direct or 
+     * the response object was not explicitly received while working with the request
+     */
+    ignoreResponseBodyIfPossible: boolean,
+    /**
      * For old versions of puppeteer, plugin should handle cookies by himself.
      * 
      * Enable this option, if you are have an issue with cookie.

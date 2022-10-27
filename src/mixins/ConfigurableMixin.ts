@@ -25,6 +25,7 @@ const DefaultConfig: IConfig = {
     timeout: 30000,
     // attempts: 1,
     nativeContinueIfPossible: false,
+    ignoreResponseBodyIfPossible: true,
     enableLegacyCookieHandling: false,
     gotHooks: {},
     requestHandlers: [
@@ -106,6 +107,13 @@ export function applyConfigurableMixin(base: any): any {
     class ConfigurableMixin extends ConfigurableMixinBase implements IConfigurableMixin {
         protected __local: Partial<IConfig> = {};
         protected __parent?: Partial<IConfig>;
+
+        getLocalConfiguration() {
+            return this.__local;
+        }
+        getParentConfiguration() {
+            return this.__parent || {};
+        }
 
         protected __configGetter<T extends keyof IConfig>(key: T): IConfig[T] {
             // merge listener list by parent of default configuration
