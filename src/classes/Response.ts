@@ -100,8 +100,9 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         };
 
         try {
-            if (request.getLocalConfiguration().ignoreResponseBodyIfPossible)
+            if (!request.getLocalConfiguration().ignoreResponseBodyIfPossible) {
                 responseOptions.body = await originalResponse.buffer()
+            }
         } catch (e) {
             // console.dir(e);
             // Could not load body for this request. This might happen if the request is a pre a preflight request.
