@@ -1,6 +1,7 @@
 # automation-extra-interception-proxy
 
 Simple way to play with a site requests and responses.
+
 <!-- by the plugin for puppeteer-extra.-->
 
 Spiritual heir of [puppeteer-page-proxy](https://www.npmjs.com/package/puppeteer-page-proxy).
@@ -9,6 +10,7 @@ Just the same behavior but in more extend way with promises.
 Using a proxy is optional.
 
 Supported proxy(through [proxy-agent](https://www.npmjs.com/package/proxy-agent)):
+
 *   `http://proxy-server-over-tcp.com:3128`
 *   `https://proxy-server-over-tls.com:3129`
 *   `socks://username:password@some-socks-proxy.com:9050` (username & password are optional)
@@ -101,9 +103,11 @@ So lets fight together!
     *   [logger](#logger)
     *   [timeout](#timeout)
     *   [nativeContinueIfPossible](#nativecontinueifpossible)
+    *   [ignoreResponseBodyIfPossible](#ignoreresponsebodyifpossible)
     *   [enableLegacyCookieHandling](#enablelegacycookiehandling)
     *   [gotHooks](#gothooks)
 *   [continue](#continue)
+*   [ignoreResponseBodyIfPossible](#ignoreresponsebodyifpossible-1)
 *   [flushLocal](#flushlocal)
     *   [Parameters](#parameters-1)
 *   [recordError](#recorderror)
@@ -127,13 +131,14 @@ So lets fight together!
     *   [url](#url)
     *   [headers](#headers)
     *   [body](#body)
+*   [\_bodyError](#\_bodyerror)
 *   [IAbortReason](#iabortreason)
 *   [InterceptionProxyRequest](#interceptionproxyrequest)
     *   [Parameters](#parameters-5)
 
 ## wrapPage
 
-[src/index.ts:22-24](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/index.ts#L22-L24 "Source code on GitHub")
+[src/index.ts:22-24](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/index.ts#L22-L24 "Source code on GitHub")
 
 Add interception ability to the page [(sample)](https://github.com/utyfua/automation-extra-interception-proxy/blob/master/samples/singlePageInterception.js)
 
@@ -146,13 +151,13 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ## IConfig
 
-[src/interfaces/base.ts:41-122](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L41-L122 "Source code on GitHub")
+[src/interfaces/base.ts:41-132](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L41-L132 "Source code on GitHub")
 
 Plugin configuration object
 
 ### cooperativePriority
 
-[src/interfaces/base.ts:51-51](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L51-L51 "Source code on GitHub")
+[src/interfaces/base.ts:51-51](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L51-L51 "Source code on GitHub")
 
 Puppeteer' "Cooperative Intercept Mode" `priority`
 
@@ -166,7 +171,7 @@ Type: ([undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### requestMode
 
-[src/interfaces/base.ts:61-61](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L61-L61 "Source code on GitHub")
+[src/interfaces/base.ts:61-61](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L61-L61 "Source code on GitHub")
 
 `ignore` - Plugin will do nothing about original request
 
@@ -180,7 +185,7 @@ Type: [RequestMode](#requestmode)
 
 ### proxy
 
-[src/interfaces/base.ts:77-77](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L77-L77 "Source code on GitHub")
+[src/interfaces/base.ts:77-77](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L77-L77 "Source code on GitHub")
 
 Proxy for request
 
@@ -201,7 +206,7 @@ Type: ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Glob
 
 ### agent
 
-[src/interfaces/base.ts:88-88](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L88-L88 "Source code on GitHub")
+[src/interfaces/base.ts:88-88](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L88-L88 "Source code on GitHub")
 
 Your agent hot handling requests
 
@@ -218,7 +223,7 @@ Type: (Agent | null)
 
 ### logger
 
-[src/interfaces/base.ts:92-92](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L92-L92 "Source code on GitHub")
+[src/interfaces/base.ts:92-92](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L92-L92 "Source code on GitHub")
 
 You can handle all plugins messages
 
@@ -226,7 +231,7 @@ Type: any
 
 ### timeout
 
-[src/interfaces/base.ts:96-96](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L96-L96 "Source code on GitHub")
+[src/interfaces/base.ts:96-96](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L96-L96 "Source code on GitHub")
 
 Request timeout in milliseconds(actual execution only)
 
@@ -234,7 +239,7 @@ Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### nativeContinueIfPossible
 
-[src/interfaces/base.ts:103-103](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L103-L103 "Source code on GitHub")
+[src/interfaces/base.ts:103-103](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L103-L103 "Source code on GitHub")
 
 If you didn't changed request or response, let puppeteer handle this request by himself
 
@@ -242,9 +247,20 @@ Default: `false`
 
 Type: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)
 
+### ignoreResponseBodyIfPossible
+
+[src/interfaces/base.ts:113-113](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L113-L113 "Source code on GitHub")
+
+If you did not use the plugin' response object it will not retrieve response from puppeteer
+for better performance
+
+Applies for `native` mode only
+
+Type: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)
+
 ### enableLegacyCookieHandling
 
-[src/interfaces/base.ts:111-111](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L111-L111 "Source code on GitHub")
+[src/interfaces/base.ts:121-121](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L121-L121 "Source code on GitHub")
 
 For old versions of puppeteer, plugin should handle cookies by himself.
 
@@ -256,7 +272,7 @@ Type: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Glob
 
 ### gotHooks
 
-[src/interfaces/base.ts:119-119](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/base.ts#L119-L119 "Source code on GitHub")
+[src/interfaces/base.ts:129-129](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/base.ts#L129-L129 "Source code on GitHub")
 
 *   **See**: <https://github.com/sindresorhus/got/blob/main/documentation/9-hooks.md>
 
@@ -268,7 +284,7 @@ Type: Hooks
 
 ## continue
 
-[src/interfaces/classes.ts:42-42](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/classes.ts#L42-L42 "Source code on GitHub")
+[src/interfaces/classes.ts:42-42](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/classes.ts#L42-L42 "Source code on GitHub")
 
 Will send gathered response back to the puppeteer immediately
 
@@ -276,9 +292,17 @@ If response not collected yet will call getResponse first.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<void>** 
 
+## ignoreResponseBodyIfPossible
+
+[src/interfaces/mixins.ts:14-14](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/mixins.ts#L14-L14 "Source code on GitHub")
+
+If you are using this specific method global `ignoreResponseBodyIfPossible` will be ignored
+
+Type: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)
+
 ## flushLocal
 
-[src/interfaces/mixins.ts:37-37](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/mixins.ts#L37-L37 "Source code on GitHub")
+[src/interfaces/mixins.ts:43-43](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/mixins.ts#L43-L43 "Source code on GitHub")
 
 Flush local configuration
 
@@ -290,7 +314,7 @@ Returns **void**
 
 ## recordError
 
-[src/interfaces/mixins.ts:47-51](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/mixins.ts#L47-L51 "Source code on GitHub")
+[src/interfaces/mixins.ts:55-59](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/mixins.ts#L55-L59 "Source code on GitHub")
 
 Pass an error to the logger
 
@@ -304,7 +328,7 @@ Returns **void**
 
 ## recordInternalError
 
-[src/interfaces/mixins.ts:57-60](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/mixins.ts#L57-L60 "Source code on GitHub")
+[src/interfaces/mixins.ts:65-68](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/mixins.ts#L65-L68 "Source code on GitHub")
 
 Pass an internal error to the logger
 
@@ -317,7 +341,7 @@ Returns **void**
 
 ## recordWarning
 
-[src/interfaces/mixins.ts:66-69](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/mixins.ts#L66-L69 "Source code on GitHub")
+[src/interfaces/mixins.ts:74-77](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/mixins.ts#L74-L77 "Source code on GitHub")
 
 Pass an warn to the logger
 
@@ -330,13 +354,13 @@ Returns **void**
 
 ## RequestMode
 
-[src/interfaces/network.ts:7-21](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L7-L21 "Source code on GitHub")
+[src/interfaces/network.ts:7-21](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L7-L21 "Source code on GitHub")
 
 Plugin mode for handling requests
 
 ### ignore
 
-[src/interfaces/network.ts:11-11](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L11-L11 "Source code on GitHub")
+[src/interfaces/network.ts:11-11](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L11-L11 "Source code on GitHub")
 
 Plugin will do nothing about original request
 
@@ -344,7 +368,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### native
 
-[src/interfaces/network.ts:16-16](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L16-L16 "Source code on GitHub")
+[src/interfaces/network.ts:16-16](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L16-L16 "Source code on GitHub")
 
 Plugin will just listen to the original request/response data and all requests will fulfilled by puppeteer itself.
 But some plugin functionality can be unavailable.
@@ -353,7 +377,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### managed
 
-[src/interfaces/network.ts:20-20](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L20-L20 "Source code on GitHub")
+[src/interfaces/network.ts:20-20](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L20-L20 "Source code on GitHub")
 
 Plugin will do all requests by himself. All plugin features will be available.
 
@@ -361,13 +385,13 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ## RequestStage
 
-[src/interfaces/network.ts:26-65](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L26-L65 "Source code on GitHub")
+[src/interfaces/network.ts:26-65](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L26-L65 "Source code on GitHub")
 
 Current stage of the request
 
 ### gotRequest
 
-[src/interfaces/network.ts:35-35](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L35-L35 "Source code on GitHub")
+[src/interfaces/network.ts:35-35](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L35-L35 "Source code on GitHub")
 
 We got a new request from the puppeteer witch includes all necessary information about.
 
@@ -377,7 +401,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### sentRequest
 
-[src/interfaces/network.ts:42-42](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L42-L42 "Source code on GitHub")
+[src/interfaces/network.ts:42-42](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L42-L42 "Source code on GitHub")
 
 The request in requesting process
 
@@ -387,7 +411,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### gotResponse
 
-[src/interfaces/network.ts:50-50](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L50-L50 "Source code on GitHub")
+[src/interfaces/network.ts:50-50](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L50-L50 "Source code on GitHub")
 
 We got response from the request witch probably was modified by the user and now user can adjust the response.
 
@@ -398,7 +422,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### sentResponse
 
-[src/interfaces/network.ts:57-57](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L57-L57 "Source code on GitHub")
+[src/interfaces/network.ts:57-57](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L57-L57 "Source code on GitHub")
 
 We sent final response of the request to the browser.
 
@@ -408,7 +432,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### closed
 
-[src/interfaces/network.ts:64-64](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L64-L64 "Source code on GitHub")
+[src/interfaces/network.ts:64-64](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L64-L64 "Source code on GitHub")
 
 Page were closed and we unable do anything
 
@@ -418,7 +442,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ## IRequestOptions
 
-[src/interfaces/network.ts:72-100](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L72-L100 "Source code on GitHub")
+[src/interfaces/network.ts:72-100](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L72-L100 "Source code on GitHub")
 
 Plugin' request options. The request have significant difference with Puppeteer' request.
 
@@ -426,7 +450,7 @@ Can be modified. All changes will be applied to the actual Puppeteer' request an
 
 ### method
 
-[src/interfaces/network.ts:78-78](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L78-L78 "Source code on GitHub")
+[src/interfaces/network.ts:78-78](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L78-L78 "Source code on GitHub")
 
 Request method.
 
@@ -436,7 +460,7 @@ Type: Method
 
 ### url
 
-[src/interfaces/network.ts:85-85](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L85-L85 "Source code on GitHub")
+[src/interfaces/network.ts:85-85](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L85-L85 "Source code on GitHub")
 
 Request url.
 
@@ -446,7 +470,7 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### headers
 
-[src/interfaces/network.ts:92-92](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L92-L92 "Source code on GitHub")
+[src/interfaces/network.ts:92-92](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L92-L92 "Source code on GitHub")
 
 Request headers.
 
@@ -456,7 +480,7 @@ Type: [Headers](https://developer.mozilla.org/docs/Web/HTML/Element/header)
 
 ### body
 
-[src/interfaces/network.ts:99-99](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L99-L99 "Source code on GitHub")
+[src/interfaces/network.ts:99-99](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L99-L99 "Source code on GitHub")
 
 Request body.
 
@@ -464,9 +488,15 @@ If request were executed you will unable to change this property.
 
 Type: ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | [Buffer](https://nodejs.org/api/buffer.html) | [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))
 
+## \_bodyError
+
+[src/interfaces/network.ts:108-108](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L108-L108 "Source code on GitHub")
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
 ## IAbortReason
 
-[src/interfaces/network.ts:127-127](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/interfaces/network.ts#L109-L126 "Source code on GitHub")
+[src/interfaces/network.ts:129-129](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/interfaces/network.ts#L111-L128 "Source code on GitHub")
 
 This option will override the response
 
@@ -492,7 +522,7 @@ Type: ErrorCode
 
 ## InterceptionProxyRequest
 
-[src/classes/Request.ts:39-239](https://github.com/utyfua/automation-extra-interception-proxy/blob/9f2bd5632c40f00401d21e5ff1feb5d41dc58c84/src/classes/Request.ts#L39-L239 "Source code on GitHub")
+[src/classes/Request.ts:40-236](https://github.com/utyfua/automation-extra-interception-proxy/blob/241889ecffda764e073601ebd400755bc5ce7879/src/classes/Request.ts#L40-L236 "Source code on GitHub")
 
 **Extends RequestBase**
 
