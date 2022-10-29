@@ -7,6 +7,12 @@ import { IInterceptionProxyRequest } from './classes'
 
 export type IConfigurableHandlerTarget = IRequestHandlerOptions["key"] | IRequestHandlerOptions["handler"]
 export type IConfigurableListenerTarget = IRequestListenerOptions["key"] | IRequestListenerOptions["handler"]
+export type IConfigurableWaitRequestOptions = {
+    priority?: number,
+    timeout?: number,
+    /** If you are using this specific method global `ignoreResponseBodyIfPossible` will be ignored */
+    ignoreResponseBodyIfPossible?: boolean,
+}
 export type IConfigurableWaitRequestReturn = { request: IInterceptionProxyRequest }
 
 export interface IConfigurableMixin extends IConfig {
@@ -28,7 +34,7 @@ export interface IConfigurableMixin extends IConfig {
     // disableListener(target: IConfigurableListenerTarget): void
     deleteLocalRequestListener(target: IConfigurableListenerTarget): boolean
 
-    waitForRequest(filter: IRequestListener, options: { timeout: number }): Promise<IConfigurableWaitRequestReturn>
+    waitForRequest(filter: IRequestListener, options: IConfigurableWaitRequestOptions): Promise<IConfigurableWaitRequestReturn>
 
     /**
      * Flush local configuration

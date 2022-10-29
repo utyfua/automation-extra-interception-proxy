@@ -21,9 +21,11 @@ class ResponseBase extends EventEmitter { }
 interface ResponseBase extends
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
     Partial<IResponseOverrides>, Partial<IAbortOverrides> { }
-for (let key of ['status', 'headers', /*'contentType',*/ 'body', 'abortReason']) {
+for (let key of ['status', 'headers', /*'contentType',*/ 'body', 'abortReason'] as const) {
     Object.defineProperty(ResponseBase.prototype, key, {
         get: function () {
+            if (key === 'body' && this.responseOptions._bodyError)
+                throw new Error(this.responseOptions._bodyError);
             return this.responseOptions[key];
         },
         set: function (value) {
@@ -96,14 +98,18 @@ class InterceptionProxyResponse extends ResponseBase implements IInterceptionPro
         const responseOptions: IResponseOverrides = {
             status: originalResponse.status(),
             headers: originalResponse.headers(),
-            body: `${NPM_PACKAGE_NAME}: Unable to get original response`,
+            body: '',
         };
 
         try {
             if (!request.getLocalConfiguration().ignoreResponseBodyIfPossible) {
                 responseOptions.body = await originalResponse.buffer()
+            } else {
+                responseOptions._bodyError = `${NPM_PACKAGE_NAME}: Response body was not resolved for performance. ` +
+                    `Use 'ignoreResponseBodyIfPossible' option or 'await response.originalResponse.buffer()' to avoid this error`
             }
         } catch (e) {
+            responseOptions._bodyError = `${NPM_PACKAGE_NAME}: Unable to get original response`
             // console.dir(e);
             // Could not load body for this request. This might happen if the request is a pre a preflight request.
         }

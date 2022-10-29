@@ -54,4 +54,8 @@ describe('Cors', () => {
         await wrapPage(page, { requestMode: 'managed' });
         await doCorsTest('managed', page);
     })
+
+    afterEach(() => {
+        expect(page.eventsMap.get('response')?.length || 0).toBe(0)
+    })
 })

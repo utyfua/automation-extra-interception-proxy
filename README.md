@@ -42,6 +42,8 @@ Using yarn
 
 # Why?
 
+This package solves next problems:
+
 ## 1. Traffic sniffing
 
 Time to time required to reach information from the browser request.

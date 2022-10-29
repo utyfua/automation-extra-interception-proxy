@@ -6,6 +6,7 @@ import {
     IRequestEventOptionsMap,
     IRequestListener,
     IInterceptionProxyRequest,
+    IConfigurableWaitRequestOptions,
     IConfigurableWaitRequestReturn,
     IConfigurableHandlerTarget,
     IConfigurableListenerTarget,
@@ -203,7 +204,7 @@ export function applyConfigurableMixin(base: any): any {
             return this.__deleteLocalEvent('requestListeners', target);
         }
 
-        waitForRequest(filter: IRequestListener, options: { priority?: number, timeout?: number } = {}): Promise<IConfigurableWaitRequestReturn> {
+        waitForRequest(filter: IRequestListener, options: IConfigurableWaitRequestOptions = {}): Promise<IConfigurableWaitRequestReturn> {
             return new Promise<IConfigurableWaitRequestReturn>((_resolve, _reject) => {
                 if (!options.timeout) options.timeout = this.timeout;
 
@@ -217,6 +218,9 @@ export function applyConfigurableMixin(base: any): any {
                     if (timeout !== null) {
                         clearTimeout(timeout);
                     }
+
+                    if (result?.request)
+                        result.request.ignoreResponseBodyIfPossible = options.ignoreResponseBodyIfPossible || false;
 
                     if (!result) {
                         _reject(error || new Error('Unknown action'))

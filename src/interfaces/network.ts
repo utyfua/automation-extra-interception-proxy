@@ -104,6 +104,8 @@ export interface IResponseOverrides {
     headers: Headers;
     // contentType: string | undefined;
     body: string | Buffer;
+    /** @internal */
+    _bodyError?: string,
 }
 
 /**

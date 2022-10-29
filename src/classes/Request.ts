@@ -13,6 +13,7 @@ import { InterceptionProxyResponse } from './Response';
 import { adjustRequestCorsHeaders } from '../utils/cors'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
 import { getCDPSession } from '../utils/getCDPSession';
+import { _OriginalRequestStateManager } from './_OriginalRequestStateManager';
 
 @applyConfigurableMixin
 @applyLoggableMixin
@@ -60,17 +61,8 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
     }
 
     static async proceedNewRequest(initial: INewRequestInitialArgs) {
-        const { originalRequest, __parent, page } = initial;
-
-        let originalResponse: Puppeteer.HTTPResponse | null = null;
-        let proceedResponse = async (_originalResponse: Puppeteer.HTTPResponse) => {
-            originalResponse = _originalResponse;
-        }
-        const onNativeResponse = (_originalResponse: Puppeteer.HTTPResponse) => {
-            if (_originalResponse.request() !== originalRequest) return;
-            proceedResponse(_originalResponse);
-        }
-        page.on('response', onNativeResponse);
+        const { page, originalRequest, __parent } = initial;
+        const originalRequestStateManager = new _OriginalRequestStateManager(page, originalRequest)
 
         const requestOptions: IRequestOptions = {
             method: originalRequest.method() as IRequestOptions["method"],
@@ -108,19 +100,18 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
 
         // native response listener handlers
         request.once('responseInstance', () => {
-            page.off('response', onNativeResponse);
+            originalRequestStateManager.close();
         });
-        proceedResponse = async (originalResponse: Puppeteer.HTTPResponse) => {
+        originalRequestStateManager.onResponse(async (originalResponse: Puppeteer.HTTPResponse | null) => {
+            if (!request.isRequestOverrideAvailable) return;
+
             request.stage = RequestStage.sentRequest;
-            const response = await InterceptionProxyResponse.proceedOriginalResponse(request, originalResponse);
+            const response = originalResponse ?
+                await InterceptionProxyResponse.proceedOriginalResponse(request, originalResponse) :
+                new InterceptionProxyResponse(request, { abortReason: 'failed' });
 
             request._setResponseInstance(response, RequestMode.native);
-        }
-
-        if (originalResponse) {
-            await proceedResponse(originalResponse);
-            originalResponse = null;
-        }
+        })
 
         for (let handlerObj of request.requestListeners) {
             try {
