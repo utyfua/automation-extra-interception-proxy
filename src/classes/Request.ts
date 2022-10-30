@@ -103,7 +103,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
             originalRequestStateManager.close();
         });
         originalRequestStateManager.onResponse(async (originalResponse: Puppeteer.HTTPResponse | null) => {
-            if (!request.isRequestOverrideAvailable) return;
+            if (request.__response) return;
 
             request.stage = RequestStage.sentRequest;
             const response = originalResponse ?

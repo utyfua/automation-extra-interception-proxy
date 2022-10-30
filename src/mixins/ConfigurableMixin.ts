@@ -206,7 +206,7 @@ export function applyConfigurableMixin(base: any): any {
 
         waitForRequest(filter: IRequestListener, options: IConfigurableWaitRequestOptions = {}): Promise<IConfigurableWaitRequestReturn> {
             return new Promise<IConfigurableWaitRequestReturn>((_resolve, _reject) => {
-                if (!options.timeout) options.timeout = this.timeout;
+                options.timeout ??= this.timeout;
 
                 let resolved: boolean = false;
                 const resolve = (error: null | any, result?: IConfigurableWaitRequestReturn): void => {

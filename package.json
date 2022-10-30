@@ -1,6 +1,6 @@
 {
   "name": "automation-extra-interception-proxy",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Puppeteer extra plugin for advanced interception and proxying requests",
   "repository": "utyfua/automation-extra-interception-proxy",
   "typings": "dist/index.d.ts",
@@ -69,7 +69,7 @@
     "jest": "^27.5.1",
     "jest-puppeteer": "^6.0.3",
     "npm-run-all": "^4.1.5",
-    "puppeteer": "^17.1.3",
+    "puppeteer": "^19.2.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.58.0",
     "rollup-plugin-commonjs": "^10.1.0",
