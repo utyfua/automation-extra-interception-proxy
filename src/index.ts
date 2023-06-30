@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer'
+import type * as Puppeteer from 'puppeteer'
 
 import { IConfig } from './interfaces';
 

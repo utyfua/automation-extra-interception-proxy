@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer'
+import type * as Puppeteer from 'puppeteer'
 import { IInterceptionProxyPlugin, EXTRA_PLUGIN_ID, INTERCEPTION_KEY_HOOK } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin } from '../mixins'
 import { InterceptionProxyBrowserConfig } from './Browser'

@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer'
+import type * as Puppeteer from 'puppeteer'
 
 export function getCDPSession(page: Puppeteer.Page, request: Puppeteer.HTTPRequest): Puppeteer.CDPSession {
     // WARNING: we are using private property of Puppeteer.HTTPRequest here

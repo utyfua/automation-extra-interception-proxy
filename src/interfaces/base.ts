@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer' // ContinueRequestOverrides
+import type * as Puppeteer from 'puppeteer' // ContinueRequestOverrides
 import type { Agent } from 'http'
 import type { Hooks } from 'got'
 import { IInterceptionProxyRequest } from './classes';

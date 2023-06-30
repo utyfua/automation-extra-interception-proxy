@@ -1,4 +1,4 @@
-import Puppeteer from "puppeteer";
+import type * as Puppeteer from "puppeteer";
 
 /**
  * @internal for _OriginalRequestStateManager

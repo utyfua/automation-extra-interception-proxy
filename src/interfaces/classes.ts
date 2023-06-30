@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer'
+import type * as Puppeteer from 'puppeteer'
 import type EventEmitter from 'events'
 import type { IConfigurableMixin, ILoggableMixin, INetworkMixin } from './mixins'
 import type { RequestStage, IRequestOptions, IResponseOptions, IAbortReason, IResponseOverrides } from './network'

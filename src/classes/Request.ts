@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer'
+import type * as Puppeteer from 'puppeteer'
 import EventEmitter from 'events';
 import { PuppeteerToughCookieStore } from 'puppeteer-tough-cookie-store';
 import { CookieJar } from 'tough-cookie';

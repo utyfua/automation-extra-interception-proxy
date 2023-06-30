@@ -18,10 +18,11 @@ Supported proxy(through [proxy-agent](https://www.npmjs.com/package/proxy-agent)
 *   `socks4://some-socks-proxy.com:9050`
 *   `pac+http://www.example.com/proxy.pac`
 
-Tested in `puppeteer/chromium` only! (including `puppeteer@14`)
+Tested in `puppeteer/chromium` only!
 
 ## Table of Contents
 
+*   [Known issues in managed mode](#known-issues-in-managed-mode)
 *   [Installing](#installing)
 *   [Why?](#why)
 *   [Motivation](#motivation)
@@ -31,6 +32,15 @@ Tested in `puppeteer/chromium` only! (including `puppeteer@14`)
 *   *   [single page interception](#single-page-interception)
 *   [Troubleshooting](#troubleshooting)
 *   [TODO](#todo)
+
+## Known issues in managed mode
+
+*   Grease chips are missing.
+*   Some headers are missing.
+*   [CORS] OPTIONS requests (preflight requests) are missing before the actual request will be executed.
+*   [CORS] Headers are close to being correct, but they're not.
+*	WebSockets will be handled by the browser (IP leak may occur if you are using a proxy in the package but not in Puppeteer itself).
+*   Optimization can be bad on high load.
 
 ## Installing
 
@@ -693,4 +703,4 @@ More specified example. We have Google ReCaptcha to solve. But when you going to
 
 # License
 
-Copyright © 2021 - 2022, Utyfua. Released under the MIT License.
+Copyright © 2021 - 2023, Utyfua. Released under the MIT License.

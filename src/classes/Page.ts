@@ -1,4 +1,4 @@
-import type Puppeteer from 'puppeteer'
+import type * as Puppeteer from 'puppeteer'
 import { IInterceptionProxyPage, INTERCEPTION_KEY_HOOK, IConfig } from '../interfaces'
 import { applyConfigurableMixin, applyLoggableMixin } from '../mixins'
 import { InterceptionProxyRequest } from './Request'
@@ -14,7 +14,7 @@ class InterceptionProxyPageConfig extends PageBase {
 
     constructor(readonly page: Puppeteer.Page, __parent?: IConfig) {
         super();
-        this.__parent = __parent;
+        Object.assign(this, __parent);
     }
 
     static async proceedNewPage(page: Puppeteer.Page, __parent?: IConfig) {
