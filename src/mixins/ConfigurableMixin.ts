@@ -1,4 +1,4 @@
-import ProxyAgent from 'proxy-agent';
+import { ProxyAgent } from 'proxy-agent';
 
 import {
     IConfig,
@@ -148,7 +148,11 @@ export function applyConfigurableMixin(base: any): any {
 
         protected __configSetter<T extends keyof IConfig>(key: T, value: IConfig[T]): void {
             if (key === 'proxy') {
-                const agent = value ? new ProxyAgent(value as string) : null
+                const agent = value ? new ProxyAgent({
+                    getProxyForUrl(_url: string) {
+                        return value as string;
+                    }
+                }) : null
                 this.__local.agent = agent;
             }
             if (key === 'agent') {

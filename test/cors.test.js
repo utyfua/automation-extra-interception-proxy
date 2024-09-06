@@ -56,6 +56,6 @@ describe('Cors', () => {
     })
 
     afterEach(() => {
-        expect(page.eventsMap.get('response')?.length || 0).toBe(0)
+        expect(page.listenerCount('response')).toBe(0)
     })
 })

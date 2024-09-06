@@ -103,7 +103,7 @@ export interface IResponseOverrides {
     status: number;
     headers: Headers;
     // contentType: string | undefined;
-    body: string | Buffer;
+    body: string | Buffer | Uint8Array;
     /** @internal */
     _bodyError?: string,
 }

@@ -81,7 +81,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "localhost:3000",
@@ -127,7 +127,7 @@
                     "corsOptionsReq": {
                         "headers": {
                             "accept": "*/*",
-                            "accept-encoding": "gzip, deflate, br",
+                            "accept-encoding": "gzip, deflate, br, zstd",
                             "accept-language": "testServer mock: 'accept-language' exist",
                             "access-control-request-headers": "x-test-header",
                             "access-control-request-method": "PUT",
@@ -152,7 +152,7 @@
                     },
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "content-length": "0",
@@ -197,7 +197,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
@@ -237,7 +237,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
@@ -271,7 +271,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "localhost:3000",
@@ -306,7 +306,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
@@ -349,7 +349,7 @@
                     "corsOptionsReq": {
                         "headers": {
                             "accept": "*/*",
-                            "accept-encoding": "gzip, deflate, br",
+                            "accept-encoding": "gzip, deflate, br, zstd",
                             "accept-language": "testServer mock: 'accept-language' exist",
                             "access-control-request-method": "DELETE",
                             "connection": "keep-alive",
@@ -371,7 +371,7 @@
                     },
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
@@ -414,7 +414,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "content-length": "0",
@@ -461,7 +461,7 @@
                     "corsOptionsReq": {
                         "headers": {
                             "accept": "*/*",
-                            "accept-encoding": "gzip, deflate, br",
+                            "accept-encoding": "gzip, deflate, br, zstd",
                             "accept-language": "testServer mock: 'accept-language' exist",
                             "access-control-request-headers": "x-test-header",
                             "access-control-request-method": "GET",
@@ -484,7 +484,7 @@
                     },
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
@@ -528,7 +528,7 @@
                 "data": {
                     "headers": {
                         "accept": "application/json, text/plain, */*",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
@@ -573,7 +573,7 @@
                 "data": {
                     "headers": {
                         "accept": "Margarine",
-                        "accept-encoding": "gzip, deflate, br",
+                        "accept-encoding": "gzip, deflate, br, zstd",
                         "accept-language": "testServer mock: 'accept-language' exist",
                         "connection": "keep-alive",
                         "host": "127.0.0.1:3000",
