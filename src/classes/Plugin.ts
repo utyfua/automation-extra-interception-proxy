@@ -1,22 +1,9 @@
 import type * as Puppeteer from 'puppeteer'
-import { IInterceptionProxyPlugin, EXTRA_PLUGIN_ID, INTERCEPTION_KEY_HOOK } from '../interfaces'
-import { applyConfigurableMixin, applyLoggableMixin } from '../mixins'
+import { IInterceptionProxyPlugin, EXTRA_PLUGIN_ID, INTERCEPTION_KEY_HOOK } from '../interfaces/index'
+import { applyConfigurableMixin, applyLoggableMixin } from '../mixins/index'
 import { InterceptionProxyBrowserConfig } from './Browser'
-
-// I hope we will migrate soon
-// Sad but stable puppeteer-extra does not support AutomationExtraPlugin yet
-
-/*/
-import { AutomationExtraPlugin } from 'automation-extra-plugin';
-@applyConfigurableMixin
-@applyLoggableMixin
-class PluginBase extends AutomationExtraPlugin {
-    static id() {
-        return EXTRA_PLUGIN_ID
-    }
-}
-/*/
 import { PuppeteerExtraPlugin } from 'puppeteer-extra-plugin'
+
 @applyConfigurableMixin
 @applyLoggableMixin
 class PluginBase extends PuppeteerExtraPlugin {

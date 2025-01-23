@@ -2,7 +2,7 @@
 import type {
     ILogObject,
     ILoggableMixin,
-} from '../interfaces'
+} from '../interfaces/index'
 
 /**
  * @utyfua:

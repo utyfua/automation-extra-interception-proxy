@@ -1,5 +1,5 @@
 /**
- * This example will show how to enable proxy for single page.
+ * This example will show how to setup the library for single page.
  */
 
 // require libs
@@ -18,12 +18,7 @@ const InterceptionUtils = require('automation-extra-interception-proxy');
     const page = await browser.newPage();
 
     // attach interception commands
-    await InterceptionUtils.wrapPage(page, {
-        requestMode: "managed",
-
-        // optional, will be handled by https://www.npmjs.com/package/proxy-agent
-        proxy: "socks5://username:password@some-socks-proxy.com:9050" 
-    });
+    await InterceptionUtils.wrapPage(page);
 
     // goto to our destination and wait for the response
     await page.goto('https://www.npmjs.com/package/automation-extra-interception-proxy');

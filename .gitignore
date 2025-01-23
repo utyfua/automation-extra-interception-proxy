@@ -1,7 +1,10 @@
 /node_modules
 /dist
+/cjs
+/esm
 /.vscode/settings.json
 /shadows
 /package-lock.json
 /yarn.lock
 /yarn-error.log
+/bun.lockb

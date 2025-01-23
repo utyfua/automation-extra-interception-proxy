@@ -1,6 +1,6 @@
 import type * as Puppeteer from 'puppeteer'
-import { IInterceptionProxyBrowser, IInterceptionProxyPlugin } from '../interfaces'
-import { applyConfigurableMixin, applyLoggableMixin } from '../mixins'
+import { IInterceptionProxyBrowser, IInterceptionProxyPlugin } from '../interfaces/index'
+import { applyConfigurableMixin, applyLoggableMixin } from '../mixins/index'
 import { InterceptionProxyPageConfig } from './Page'
 
 @applyConfigurableMixin

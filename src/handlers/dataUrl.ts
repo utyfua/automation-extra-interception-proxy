@@ -1,9 +1,8 @@
 import parseDataURL from 'data-urls';
 import {
     IInterceptionProxyRequest, IResponseOptions
-} from '../interfaces';
+} from '../interfaces/index';
 
-export const dataUrlHandlerKey = 'dataUrl';
 export async function dataUrlHandler(request: IInterceptionProxyRequest): Promise<void | IResponseOptions> {
     const { url } = request;
     if (!url.startsWith('data:')) return;

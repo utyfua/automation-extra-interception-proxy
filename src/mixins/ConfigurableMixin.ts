@@ -1,5 +1,3 @@
-import { ProxyAgent } from 'proxy-agent';
-
 import {
     IConfig,
     IConfigurableMixin,
@@ -11,36 +9,19 @@ import {
     IConfigurableHandlerTarget,
     IConfigurableListenerTarget,
     NOOP, RequestMode,
-} from '../interfaces'
+} from '../interfaces/index'
 
-import { baseHttpHandler, baseHttpHandlerKey } from '../handlers/baseHttpHandler'
-import { dataUrlHandler, dataUrlHandlerKey } from '../handlers/dataUrl'
 import { defaultLogger } from '../utils/logger'
 
 const DefaultConfig: IConfig = {
     cooperativePriority: undefined,
-    requestMode: RequestMode.managed,
+    requestMode: RequestMode.native,
     logger: defaultLogger,
-    proxy: null,
-    agent: null,
     timeout: 30000,
     // attempts: 1,
     nativeContinueIfPossible: false,
     ignoreResponseBodyIfPossible: true,
-    enableLegacyCookieHandling: false,
-    gotHooks: {},
-    requestHandlers: [
-        {
-            key: baseHttpHandlerKey,
-            priority: -10,
-            handler: baseHttpHandler,
-        },
-        {
-            key: dataUrlHandlerKey,
-            priority: -11,
-            handler: dataUrlHandler,
-        },
-    ],
+    requestHandlers: [],
     requestListeners: [],
 }
 
@@ -147,18 +128,6 @@ export function applyConfigurableMixin(base: any): any {
         }
 
         protected __configSetter<T extends keyof IConfig>(key: T, value: IConfig[T]): void {
-            if (key === 'proxy') {
-                const agent = value ? new ProxyAgent({
-                    getProxyForUrl(_url: string) {
-                        return value as string;
-                    }
-                }) : null
-                this.__local.agent = agent;
-            }
-            if (key === 'agent') {
-                this.__local.proxy = null;
-            }
-
             this.__local[key] = value;
             // this.emit(key, value)
         }

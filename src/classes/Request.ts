@@ -1,14 +1,12 @@
 import type * as Puppeteer from 'puppeteer'
 import EventEmitter from 'events';
-import { PuppeteerToughCookieStore } from 'puppeteer-tough-cookie-store';
-import { CookieJar } from 'tough-cookie';
 import {
     IConfigurableMixin, ILoggableMixin, INetworkMixin,
     IInterceptionProxyRequest, INewRequestInitialArgs, IRequestOptions,
     RequestStage, IAbortReason, IInterceptionProxyResponse, IResponseOptions,
     IResponseOverrides, RequestMode,
-} from '../interfaces'
-import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins'
+} from '../interfaces/index'
+import { applyConfigurableMixin, applyLoggableMixin, applyNetworkMixin } from '../mixins/index'
 import { InterceptionProxyResponse } from './Response';
 import { adjustRequestCorsHeaders } from '../utils/cors'
 import { getStageEnhancedErrorMessage } from '../utils/errors';
@@ -61,7 +59,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
     }
 
     static async proceedNewRequest(initial: INewRequestInitialArgs) {
-        const { page, originalRequest, __parent } = initial;
+        const { page, originalRequest } = initial;
         const originalRequestStateManager = new _OriginalRequestStateManager(page, originalRequest)
 
         const requestOptions: IRequestOptions = {
@@ -77,24 +75,6 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
             const client = getCDPSession(page, originalRequest);
             return !client.connection()
         }
-
-        try {
-            if (__parent.enableLegacyCookieHandling) {
-                const cookieJar = new CookieJar(new PuppeteerToughCookieStore(getCDPSession(__parent.page, originalRequest)));
-                requestOptions.headers['Cookie'] = await cookieJar.getCookieString(requestOptions.url);
-            }
-        } catch (error) {
-            if (isRequestClientClosed()) return;
-
-            __parent.logger({
-                level: 'warning',
-                error: error,
-                message:
-                    `Getting cookie error but we will proceed without\n` +
-                    (error instanceof Error ? error.message : '' + error),
-                meta: [requestOptions.url],
-            });
-        };
 
         const request = new InterceptionProxyRequest(initial, requestOptions);
 

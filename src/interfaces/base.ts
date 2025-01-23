@@ -1,6 +1,4 @@
 import type * as Puppeteer from 'puppeteer' // ContinueRequestOverrides
-import type { Agent } from 'http'
-import type { Hooks } from 'got'
 import { IInterceptionProxyRequest } from './classes';
 import { IResponseOptions, RequestMode } from './network'
 
@@ -15,9 +13,7 @@ export declare function Logger(logObject: ILogObject): void
 export interface IBaseRequestHookOptions {
     key: string | symbol;
     priority: number;
-    // disabled?: boolean;
     isLocal?: boolean;
-    // handler: (...args: any[]) => any;
 }
 
 export type IRequestHandler = (request: IInterceptionProxyRequest) => void | IResponseOptions | Promise<void | IResponseOptions>
@@ -60,33 +56,6 @@ export interface IConfig {
      */
     requestMode: RequestMode;
     /**
-     * Proxy for request
-     * 
-     * Automatically sets `agent` property using [proxy-agent](https://www.npmjs.com/package/proxy-agent)
-     * 
-     * Examples:
-     * - `http://proxy-server-over-tcp.com:3128`
-     * - `https://proxy-server-over-tls.com:3129`
-     * - `socks://username:password@some-socks-proxy.com:9050` (username & password are optional)
-     * - `socks5://username:password@some-socks-proxy.com:9050` (username & password are optional)
-     * - `socks4://some-socks-proxy.com:9050`
-     * - `pac+http://www.example.com/proxy.pac`
-     * 
-     * Default `null`
-     */
-    proxy: string | null, // TODO: fill missing type
-    /**
-     * Your agent hot handling requests
-     * 
-     * Sets by `proxy` property. Cleans `proxy` property if sets directly.
-     * 
-     * Default `null`
-     * 
-     * @deprecated Use `proxy` property instead. 
-     * Deprecated because of possibly incoming request handling rework.
-     */
-    agent: Agent | null,
-    /**
      * You can handle all plugins messages
      */
     logger: typeof Logger;
@@ -111,22 +80,6 @@ export interface IConfig {
      * the response object was not explicitly received while working with the request
      */
     ignoreResponseBodyIfPossible: boolean,
-    /**
-     * For old versions of puppeteer, plugin should handle cookies by himself.
-     * 
-     * Enable this option, if you are have an issue with cookie.
-     * 
-     * Recommended to upgrade your puppeteer version instead.
-     */
-    enableLegacyCookieHandling: boolean;
-    /**
-     * It is not recommended to use. Use another library properties to do it.
-     * 
-     * Modify requests in more advanced way through interaction with got.
-     * 
-     * @see https://github.com/sindresorhus/got/blob/main/documentation/9-hooks.md
-     */
-    gotHooks: Hooks,
     requestHandlers: IRequestHandlerOptions[];
     requestListeners: IRequestListenerOptions[];
 }

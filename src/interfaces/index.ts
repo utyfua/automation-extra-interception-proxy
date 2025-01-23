@@ -1,5 +1,5 @@
 /// <reference path="./puppeteer-mods.d.ts" />
-// Warn: The above is EXTREMELY important for our custom page mods to be recognized by the end users typescript!
+// Warn: The above is EXTREMELY important for our custom page mods to be recognized by the typescript end users!
 
 export * from './base';
 export * from './classes';

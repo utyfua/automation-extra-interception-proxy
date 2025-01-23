@@ -1,4 +1,4 @@
-import { Logger } from '../interfaces';
+import { Logger } from '../interfaces/index';
 
 
 export const defaultLogger: typeof Logger =

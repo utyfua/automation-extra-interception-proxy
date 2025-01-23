@@ -1,19 +1,19 @@
 import got, { OptionsOfBufferResponseBody } from 'got';
+import { IInterceptionProxyRequest, IResponseOptions } from '../interfaces/index';
 
-import { IInterceptionProxyRequest, IResponseOptions } from '../interfaces';
-
-export const baseHttpHandlerKey = 'baseHttpHandlerKey';
-export async function baseHttpHandler(request: IInterceptionProxyRequest): Promise<void | IResponseOptions> {
+export const buildGotHttpHandler = (
+    gotOptions: Partial<OptionsOfBufferResponseBody> = {}
+) => async (request: IInterceptionProxyRequest): Promise<void | IResponseOptions> => {
     try {
         const {
             method, url, headers, body,
-            timeout, agent, gotHooks
+            timeout,
         } = request;
         if (!url.startsWith('http:') && !url.startsWith('https:')) return;
 
-        const gotOptions: OptionsOfBufferResponseBody = {
+        const options: OptionsOfBufferResponseBody = {
             // main request options
-            method, url, headers, body, hooks: gotHooks,
+            method, url, headers, body,
 
             // secondary request options
             timeout,
@@ -23,16 +23,11 @@ export async function baseHttpHandler(request: IInterceptionProxyRequest): Promi
             throwHttpErrors: false,
             ignoreInvalidCookies: true,
             followRedirect: false,
+
+            ...gotOptions,
         }
 
-        if (agent) {
-            gotOptions.agent = {
-                http: agent,
-                https: agent,
-            } as any;
-        }
-
-        const gotResponse = await got(gotOptions);
+        const gotResponse = await got(options);
 
         return {
             status: gotResponse.statusCode,

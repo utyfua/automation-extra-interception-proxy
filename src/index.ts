@@ -1,6 +1,6 @@
 import type * as Puppeteer from 'puppeteer'
 
-import { IConfig } from './interfaces';
+import { IConfig } from './interfaces/index';
 
 import { Plugin } from './classes/Plugin';
 import { InterceptionProxyPageConfig } from './classes/Page';

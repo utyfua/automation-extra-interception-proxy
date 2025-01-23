@@ -22,7 +22,6 @@ const InterceptionUtils = require('./');
     const interceptions = await InterceptionUtils.wrapPage(page, {
         requestMode: 'managed',
         // requestMode: 'native',
-        // enableLegacyCookieHandling: true,
     });
     console.log({ interceptions })
 

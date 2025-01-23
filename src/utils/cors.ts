@@ -1,7 +1,7 @@
 import type { Frame } from 'puppeteer';
 import {
     INewRequestInitialArgs, IRequestOptions,
-} from '../interfaces'
+} from '../interfaces/index'
 import { getDomain, getOrigin } from './urls'
 
 function getFrameUrl(frame: Frame | null): string | null {

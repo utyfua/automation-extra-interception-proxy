@@ -1,4 +1,4 @@
-import { INetworkMixin, RequestStage } from '../interfaces'
+import { INetworkMixin, RequestStage } from '../interfaces/index'
 
 export function applyNetworkMixin(base: any): any {
     /**

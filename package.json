@@ -1,29 +1,8 @@
 {
   "name": "automation-extra-interception-proxy",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Puppeteer extra plugin for advanced interception and proxying requests",
   "repository": "utyfua/automation-extra-interception-proxy",
-  "typings": "dist/index.d.ts",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "files": [
-    "dist",
-    "src",
-    "README.md"
-  ],
-  "scripts": {
-    "prebuild": "rimraf --glob dist/*",
-    "build": "rollup -c",
-    "docs": "documentation readme ./src/index.ts --github --section API --parse-extension=ts --require-extension=.ts ",
-    "test:dev": "node test.dev",
-    "test:dev:build": "run-s build test:dev",
-    "test:js": "jest -c jest.config.js",
-    "test:server": "node ./testServer",
-    "test": "run-s build test:js",
-    "test-ci": "run-s test",
-    "ambient-dts": "run-s ambient-dts-copy",
-    "ambient-dts-copy": "copyfiles -u 1 \"src/**/*.d.ts\" dist"
-  },
   "keywords": [
     "puppeteer",
     "interception",
@@ -31,52 +10,72 @@
   ],
   "author": "Utyfua",
   "license": "MIT",
+  "scripts": {
+    "build": "sh build.sh",
+    "docs": "documentation readme ./src/index.ts --github --section API --parse-extension=ts --require-extension=.ts ",
+    "test:dev": "node test.dev",
+    "test:dev:build": "run-s build test:dev",
+    "test:js": "jest -c jest.config.js",
+    "test:server": "node ./testServer",
+    "test": "run-s build test:js",
+    "test-ci": "run-s test"
+  },
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js"
+    },
+    "./*": {
+      "import": "./esm/*.js",
+      "require": "./cjs/*.js"
+    },
+    "./src/*": "./src/*"
+  },
+  "files": [
+    "cjs",
+    "ems",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
   "dependencies": {
-    "data-urls": "^5.0.0",
-    "got": "^11.8.2",
-    "proxy-agent": "^6.4.0",
-    "puppeteer-extra-plugin": "^3.2.3",
-    "puppeteer-tough-cookie-store": "^1.1.0",
-    "tough-cookie": "^4.1.4"
+    "puppeteer-extra-plugin": "*"
   },
   "peerDependencies": {
-    "puppeteer": "*",
-    "puppeteer-extra": "*",
-    "tough-cookie": "*"
+    "data-urls": "*",
+    "got": "11",
+    "puppeteer-extra-plugin": "*"
   },
   "peerDependenciesMeta": {
-    "puppeteer": {
+    "puppeteer-extra-plugin": {
       "optional": true
     },
-    "puppeteer-extra": {
+    "data-urls": {
       "optional": true
     },
-    "tough-cookie": {
+    "got": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-typescript": "^7.24.7",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.6",
     "@types/data-urls": "^3.0.4",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.16.5",
     "@types/tough-cookie": "^4.0.5",
     "copyfiles": "^2.4.1",
-    "documentation": "^13.2.5",
-    "express": "^4.19.2",
+    "data-urls": "^5.0.0",
+    "documentation": "^14.0.3",
+    "express": "^4.21.2",
+    "got": "^11.8.2",
     "jest": "^29.7.0",
-    "jest-puppeteer": "^10.1.0",
+    "jest-puppeteer": "^11.0.0",
     "npm-run-all": "^4.1.5",
-    "puppeteer": "^23.3.0",
+    "puppeteer": "^24.1.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.21.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+    "typescript": "^5.7.3"
   }
 }

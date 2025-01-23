@@ -1,4 +1,4 @@
-import { RequestStage } from '../interfaces'
+import { RequestStage } from '../interfaces/index'
 
 export function getStageEnhancedErrorMessage(key: string, stage: RequestStage): string {
     let message: string = 'unknown stage??'
