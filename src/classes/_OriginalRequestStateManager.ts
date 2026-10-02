@@ -16,6 +16,8 @@ export class _OriginalRequestStateManager {
         response: (response: Puppeteer.HTTPResponse) => void,
         requestfailed: (response: Puppeteer.HTTPRequest) => void,
         requestfinished: (response: Puppeteer.HTTPRequest) => void,
+        requestservedfromcache: (response: Puppeteer.HTTPRequest) => void,
+        framenavigated: (frame: Puppeteer.Frame) => void,
     }
     protected userListeners: UserListener[] = [];
     constructor(protected page: Puppeteer.Page, protected request: Puppeteer.HTTPRequest) {
@@ -32,6 +34,14 @@ export class _OriginalRequestStateManager {
                 if (_request !== request) return;
                 this.close();
             },
+            requestservedfromcache: (_request) => {
+                if (_request !== request) return;
+                this.close(_request.response());
+            },
+            framenavigated: (_frame) => {
+                if (_frame !== request.frame()) return;
+                this.close();
+            }
         }
         this.setListeners('on')
     }
@@ -48,7 +58,7 @@ export class _OriginalRequestStateManager {
         }
         this.userListeners.push(listener);
     }
-    close(response?: Puppeteer.HTTPResponse) {
+    close(response?: Puppeteer.HTTPResponse | null) {
         if (this.response !== undefined) return;
         const resultResponse = this.response = response || this.request.response();
         this.setListeners('off')

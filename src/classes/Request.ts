@@ -117,7 +117,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
             }
             await request.continue();
         } catch (error) {
-            if (isRequestClientClosed()) return;
+            if (isRequestClientClosed() || request.originalRequest.isInterceptResolutionHandled()) return;
 
             request.recordError('Unable to proceed response from interception handler. We will abort the request.', error);
             try {
@@ -133,6 +133,21 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
         this.__stage = value;
         this.emit2('stage', value);
     };
+
+    protected __waitResponseInstance(): IInterceptionProxyResponse | Promise<IInterceptionProxyResponse> {
+        if (this.__response) return this.__response;
+        return new Promise((_resolve) => {
+            const resolve = (response: IInterceptionProxyResponse) => {
+                clearTimeout(timer);
+                _resolve(response);
+            }
+            const timer = setTimeout(() => {
+                this.removeListener('responseInstance', resolve);
+                _resolve(new InterceptionProxyResponse(this, { abortReason: 'timedout' }));
+            }, this.timeout);
+            this.once('responseInstance', resolve);
+        });
+    }
 
     protected __requestOptionSetter<T extends keyof IRequestOptions>(key: T, value: IRequestOptions[T]) {
         if (!this.isRequestOverrideAvailable) {
@@ -169,8 +184,7 @@ class InterceptionProxyRequest extends RequestBase implements IInterceptionProxy
 
         if (this.__response || this.isResponseCollecting ||
             (requestMode === RequestMode.native && !responseOptions)) {
-            const response: IInterceptionProxyResponse =
-                this.__response || await new Promise(c => this.once('responseInstance', c));
+            const response: IInterceptionProxyResponse = await this.__waitResponseInstance();
 
             if (responseOptions) {
                 response.setResponse(responseOptions);

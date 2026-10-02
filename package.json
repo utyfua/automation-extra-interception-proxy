@@ -1,6 +1,6 @@
 {
   "name": "automation-extra-interception-proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Puppeteer extra plugin for advanced interception and proxying requests",
   "repository": "utyfua/automation-extra-interception-proxy",
   "keywords": [
